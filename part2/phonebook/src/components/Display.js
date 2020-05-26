@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Display = (props) => {
+const Display = ({ persons, searchParam }) => {
 
-  const searchOutput = props.persons.filter(person => person.name.toUpperCase().includes(props.searchParam.toUpperCase()))
+  const searchOutput = persons.filter(person => person.name.toUpperCase().includes(searchParam.toUpperCase()))
 
   return (
     <div>
