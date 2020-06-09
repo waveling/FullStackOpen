@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import Search from './components/Search';
 import Form from './components/Form';
 import Display from './components/Display';
-import axios from 'axios';
+import personsService from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([]) 
-  const [ newName, setNewName ] = useState('')
-  const [ newNumber, setNewNumber ] = useState('')
-  const [searchParam, setSearchParam] = useState('')
+  const [ persons, setPersons ] = useState([]);
+  const [ newName, setNewName ] = useState('');
+  const [ newNumber, setNewNumber ] = useState('');
+	const [searchParam, setSearchParam] = useState('');
+	const [successMessage, setSuccessMessage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    console.log('effect');
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personsService.getAll().then(response => {
+      setPersons(response.data)
+    })
   }, [])
 
-  /* Input new name in state */
+  //Event handlers for Name and Number changes in the input fields (saves these in state)
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -28,20 +27,74 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
-  
-  const addContact = (event) => {
+	
+	//Delete person from database (prompt a confirmation)
+  const handleDelete = (id, name) => {
+			return () => {
+				if (window.confirm(`Are you sure you want to delete the contact ${name}`)) {
+					personsService
+					.deleteContact(id)
+					.then(() => {
+						setPersons(persons.filter(person => person.id !== id));
+						setNewName('');
+						setNewNumber('');
+					})
+					}
+				}
+  }
+
+	//Add person to database
+  const addContact = event => {
     event.preventDefault();
     const contactObject = {
       name: newName,
       number: newNumber
-    }
-    persons.some(person => person.name === newName || person.number === newNumber) 
-    ? window.alert(`The contact ${newName} already exists!`)
-    : setPersons(persons.concat(contactObject));
-      setNewName('')
-      setNewNumber('')  
-  }
+		}
+		//If a contact with same name exists -> update contact
+    if (persons.some(person => person.name === newName)) {
+			const contact = persons.filter(person => person.name === newName)
+			if (window.confirm(`Number for contact ${newName} already exists. Do you want to replace?`))
+			personsService
+				.updateContact(contact[0].id, contactObject)
+				.then(() => {
+					personsService
+						.getAll()
+						.then(response => setPersons(response.data))
+						setNewName('');
+						setNewNumber('');
+						setSuccessMessage(`Updated number for ${newName}`)
+						setTimeout(() => {
+							setSuccessMessage(null)
+						}, 3000)
+					})
+				.catch(() => {
+					setErrorMessage(`${newName} was already deleted from the server.`);
+					setPersons(persons.filter(person => person.id !== contact[0].id));
+					setNewNumber('');
+					setNewName('');
+				})
+				setTimeout(() => {
+					setErrorMessage(null)
+				}, 3000)
+		//If a brand new contact -> add to persons db
+		} else {
+				setPersons(persons.concat(contactObject));
+				setNewName('');
+				setNewNumber('');  
+				personsService.createContact(contactObject);
+				personsService
+					.getAll()
+					.then(response => {
+					setPersons(response.data)
+				})
+			 	setSuccessMessage(`Added contact for ${newName}`)
+				setTimeout(() => {
+				 setSuccessMessage(null)
+				}, 3000)
+			}
+	}
 
+	//Event handler for setting the inputted text in state for Search input
   const searchInput = (event) => {
     setSearchParam(event.target.value)
   }
@@ -49,6 +102,10 @@ const App = () => {
 
   return (
     <div>
+			<Notification 
+				successMessage={successMessage} 
+				errorMessage={errorMessage}
+			/>
       <h1>Phonebook</h1>
       <Search 
         searchParam={searchParam} 
@@ -66,6 +123,7 @@ const App = () => {
       <Display 
         persons={persons}
         searchParam={searchParam}
+				deleteContact={handleDelete}
       />
     </div>
   )
