@@ -11,7 +11,8 @@ morgan.token('content', function (req, res) {
 
 app.use(cors());
 app.use(express.json());
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'));
+app.use(express.static('build'));
 
 //Hard coded list of contacts in the phonebook
 let persons = [
