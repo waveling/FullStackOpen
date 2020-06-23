@@ -21,8 +21,9 @@ const contact = new Contact({
 //If user provided name & number with password, adds the contact to db; else prints existing contact to console.
 if (!process.argv[3]) {
   Contact.find({}).then(result => {
+    console.log('Phonebook:')
     result.forEach(contact => {
-      console.log(contact);
+      console.log(contact.name, contact.number);
     });
     mongoose.connection.close();
   })
