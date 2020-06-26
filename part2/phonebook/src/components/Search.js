@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Search = ({ searchInput, searchParam }) => {
+const Search = ({ handleSearch, searchParam }) => {
   return (
     <div>
-      <h4>Search contact:<input onChange={searchInput} value={searchParam}/></h4>
+      <h4>Search contact:<input onChange={handleSearch} value={searchParam}/></h4>
     </div>
   )
 }
