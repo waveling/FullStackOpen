@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Display = ({ persons, searchParam, deleteContact }) => {
+const Display = ({ persons, deleteContact }) => {
 
   return (
       persons.map(person => 
