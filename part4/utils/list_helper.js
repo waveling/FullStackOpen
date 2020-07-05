@@ -71,7 +71,7 @@ const favoriteBlog = (blogs) => {
 //searches for the author with most blogs. Returns the author and the amount of blogs.
 const mostBlogs = (blogs) => {
   const groupedList = _.groupBy(blogs, function(blogs) {
-    return blogs.author; //returns an object with the authors as keys and arrays of objects as values
+    return blogs.author; 
   });
 
   const reduced = _.reduce(groupedList, function(sum, n) {
@@ -82,11 +82,37 @@ const mostBlogs = (blogs) => {
   return { author: reduced[0].author, blogs: reduced.length };
 }
 
-console.log(mostBlogs(blogs));
+//searches for the author with most likes. Returns the author and the amount of likes.
+const mostLikes = (blogs) => {
+  const groupedList = _.groupBy(blogs, function(blogs) {
+    return blogs.author;
+  });
+
+  const groupedListKeys = Object.keys(groupedList);
+
+  //Groups all authors with the amount of likes their blogs have gotten
+  const mapped = groupedListKeys.map((key) => {
+    const grouped = groupedList[key].reduce((sum, n) => {
+      return sum + n.likes;
+    }, 0)
+    return {author: key, likes: grouped};
+  })
+
+  //Pick the author with most likes
+  const result = mapped.reduce((sum, n) => {
+    return sum.likes > n.likes ? sum : n;
+  })
+
+  return result;
+}
+
+mostLikes(blogs);
+
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };
