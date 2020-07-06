@@ -94,20 +94,17 @@ const mostLikes = (blogs) => {
   const mapped = groupedListKeys.map((key) => {
     const grouped = groupedList[key].reduce((sum, n) => {
       return sum + n.likes;
-    }, 0)
+    }, 0);
     return {author: key, likes: grouped};
-  })
+  });
 
   //Pick the author with most likes
   const result = mapped.reduce((sum, n) => {
     return sum.likes > n.likes ? sum : n;
-  })
+  });
 
   return result;
-}
-
-mostLikes(blogs);
-
+};
 
 module.exports = {
   dummy,
