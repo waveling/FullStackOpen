@@ -1,4 +1,9 @@
 const listHelper = require('../utils/list_helper');
+const mongoose = require('mongoose');
+const supertest = require('supertest');
+const app = require('../app');
+
+const api = supertest(app);
 
 const blogs = [ 
   { 
@@ -51,22 +56,46 @@ const blogs = [
   }
 ]
 
+test('blogs are returned as json', async () => {
+  await api
+    .get('./api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+});
+
+
 describe('dummyTest', () => {
   test('dummy returns one', () => {
     
-    const result = listHelper.dummy(blogs)
-    expect(result).toBe(1)
-  })
-})
+    const result = listHelper.dummy(blogs);
+    expect(result).toBe(1);
+  });
+});
 
 describe('totalLikes', () => {
   test('total likes combined', () => {
     expect(listHelper.totalLikes(blogs)).toBe(36);
-  })
-})
+  });
+});
 
 describe('favoriteBlog', () => {
   test('search for the blog with most likes', () => {
-    expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2])
+    expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2]);
+  });
+});
+
+describe('mostBlogs', () => {
+  test('search for author with most blogs', () => {
+    expect(listHelper.mostBlogs(blogs)).toEqual({ author: 'Robert C. Martin', blogs: 3 });
+  });
+});
+
+describe('mostLikes', () => {
+  test('author with most likes', () => {
+    expect(listHelper.mostLikes(blogs)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
+    
+afterAll(() => {
+  mongoose.connection.close();
+});
