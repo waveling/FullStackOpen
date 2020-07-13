@@ -56,11 +56,12 @@ const blogs = [
   }
 ]
 
+//TODO: This does not work yet
 test('blogs are returned as json', async () => {
   await api
-    .get('./api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+  .get('/api/blogs')
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
 });
 
 
@@ -95,7 +96,7 @@ describe('mostLikes', () => {
     expect(listHelper.mostLikes(blogs)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
-    
+
 afterAll(() => {
   mongoose.connection.close();
 });
