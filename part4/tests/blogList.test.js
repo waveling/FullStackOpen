@@ -56,7 +56,6 @@ const blogs = [
   }
 ]
 
-//TODO: This does not work yet
 test('blogs are returned as json', async () => {
   await api
   .get('/api/blogs')
@@ -64,6 +63,17 @@ test('blogs are returned as json', async () => {
   .expect('Content-Type', /application\/json/)
 });
 
+test('verify id formatting', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body[0].id).toBeDefined();
+});
+
+test('length of list', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(11);
+})
 
 describe('dummyTest', () => {
   test('dummy returns one', () => {
