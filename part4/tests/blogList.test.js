@@ -66,7 +66,7 @@ beforeEach(async () => {
 
   blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
-})
+});
 
 //Tests that blogs are returned as json
 test('blogs are returned as json', async () => {
@@ -97,7 +97,7 @@ test('specific blog is within the returned blogs', async () => {
   const contents = response.body.map(r => r.author)
 
   expect(contents).toContain('Michael Chan')
-})
+});
 
 //Makes sure the post request functions as predicted, and a correctly formatted blog can be added
 test('a valid blog can be added to the list', async () => {
@@ -111,7 +111,7 @@ test('a valid blog can be added to the list', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
-    .expect(201)
+    .expect(200)
     .expect('Content-Type', /application\/json/)
 
   const response = await api.get('/api/blogs')
@@ -121,7 +121,42 @@ test('a valid blog can be added to the list', async () => {
   expect(response.body).toHaveLength(3)
   expect(author).toContain('John Doe')
 
-})
+});
+
+//Test that if no "likes"-value is given, it defaults to 0
+test('likes-value defaults to one', async () => {
+  //likes-value is missing:
+  const newBlog = {
+    title: "Test Blog",
+    author: "John Doe",
+    url: "https://somerandomurl.com/"
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+  
+  const response = await api.get('/api/blogs')
+
+  //Checks the previously added newBlog for likes-value:
+  const likes = response.body[2].likes;
+
+  expect(likes).toBe(0)
+});
+
+
+//If title and url-properties are missing, returns 400
+test('validate title and url-properties', async () => {
+  const newBlog = {
+    author: 'John Doe',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+});
 
 //Test that returns 1 (one) regardless of input
 describe('dummyTest', () => {
@@ -154,8 +189,8 @@ describe('mostBlogs', () => {
 describe('mostLikes', () => {
   test('author with most likes', () => {
     expect(listHelper.mostLikes(blogs)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
-  })
-})
+  });
+});
 
 afterAll(() => {
   mongoose.connection.close();
