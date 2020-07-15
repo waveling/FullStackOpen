@@ -2,10 +2,11 @@ const listHelper = require('../utils/list_helper');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
+const Blog = require('../models/blog');
 
 const api = supertest(app);
 
-const blogs = [ 
+const initialBlogs = [ 
   { 
     _id: "5a422a851b54a676234d17f7", 
     title: "React patterns", 
@@ -56,6 +57,18 @@ const blogs = [
   }
 ]
 
+//Cleans the database before each test, and makes sure the db is the same before each test.
+beforeEach(async () => {
+  await Blog.deleteMany({});
+
+  let blogObject = new Blog(initialBlogs[0])
+  await blogObject.save()
+
+  blogObject = new Blog(initialBlogs[1])
+  await blogObject.save()
+})
+
+//Tests that blogs are returned as json
 test('blogs are returned as json', async () => {
   await api
   .get('/api/blogs')
@@ -63,18 +76,54 @@ test('blogs are returned as json', async () => {
   .expect('Content-Type', /application\/json/)
 });
 
+//Makes sure the length of the bloglist is correct
+test('length of bloglist', async () => {
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(2);
+});
+
+//Tests that the the id of the returned mongoose object is correctly formatted (id instead of _id(default))
 test('verify id formatting', async () => {
   const response = await api.get('/api/blogs')
 
   expect(response.body[0].id).toBeDefined();
 });
 
-test('length of list', async () => {
+//Tests the blog containing a specific author is included in the bloglist
+test('specific blog is within the returned blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  expect(response.body).toHaveLength(11);
+  const contents = response.body.map(r => r.author)
+
+  expect(contents).toContain('Michael Chan')
 })
 
+//Makes sure the post request functions as predicted, and a correctly formatted blog can be added
+test('a valid blog can be added to the list', async () => {
+  const newBlog = {
+    title: "Test Blog", 
+    author: "John Doe", 
+    url: "https://somerandomurl.com/", 
+    likes: 10, 
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const author = response.body.map(r => r.author)
+
+  expect(response.body).toHaveLength(3)
+  expect(author).toContain('John Doe')
+
+})
+
+//Test that returns 1 (one) regardless of input
 describe('dummyTest', () => {
   test('dummy returns one', () => {
     
@@ -83,6 +132,7 @@ describe('dummyTest', () => {
   });
 });
 
+//Calculates the total likes of all the blogs in the list
 describe('totalLikes', () => {
   test('total likes combined', () => {
     expect(listHelper.totalLikes(blogs)).toBe(36);
