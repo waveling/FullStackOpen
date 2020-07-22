@@ -86,7 +86,7 @@ const mostBlogs = (blogs) => {
   }, {});
 
   return { author: reduced[0].author, blogs: reduced.length };
-}
+};
 
 //searches for the author with most likes. Returns the author and the amount of likes.
 const mostLikes = (blogs) => {
