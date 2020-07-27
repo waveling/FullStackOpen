@@ -6,7 +6,7 @@ const cors = require('cors');
 const Person = require('./models/person');
 
 //Custom morgan token to show request body if request method is POST
-morgan.token('content', function (req, res) {
+morgan.token('content', function (req) {
 	if (req.method === 'POST') {
 		return JSON.stringify(req.body);
 	}});
@@ -60,18 +60,19 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 	Person.findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: 'query' })
 		.then(updatedContact => {
-			res.json(updatedContact);
+			res.json(updatedContact.toJSON());
 		})
 		.catch(error => next(error));
 });
 
 //Route for deleting contact based on the id
-app.delete('/api/persons/:id', (req, res) => {
-	Person.findByIdAndRemove(req.params.id)
-		.then(result => {
+app.delete('/api/persons/:id', (req, res, next) => {
+	Person
+		.findByIdAndRemove(req.params.id)
+		.then(() => {
 			res.status(204).end();
 		})
-		.catch(error => console.log(error));
+		.catch(error => next(error));
 });
 
 //Route for adding contacts to the phonebook
@@ -107,7 +108,7 @@ app.post('/api/persons', (req, res, next) => {
 
 //Error handler middleware
 const errorHandler = (error, req, res, next) => {
-	console.error('This is the error message:', error.message);
+	console.error(error.message);
 
 	if (error.name === 'CastError') {
 		return res.status(400).send({ error: 'malformatted id' });
@@ -121,6 +122,7 @@ const errorHandler = (error, req, res, next) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT;
+
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
