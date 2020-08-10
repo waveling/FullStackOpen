@@ -57,27 +57,21 @@ blogsRouter.put('/:id', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response, next) => {
 
   try {
-
-    console.log('this is before')
     const requestId = request.params.id;
     const token = request.token;
-    
+
     const decodedToken = jwt.verify(token, process.env.SECRET);
-    console.log('decoded:', decodedToken)
-    
+
     if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     
-    console.log('decoded id', decodedToken.id, '');
+    const blog = await Blog.findById(requestId);
+
+    if (decodedToken.id === blog.user.toString()) {
+      await Blog.findByIdAndRemove(requestId);
+    }
     
-    //after all this i should search for the blog with the same id as the request has?
-    //if the blog.user is the same as decodedToken.id then remove the blog corresponding to request id
-
-    const blog = await Blog.find({});
-    console.log('this is blog:', blog[3].user)
-
-    await Blog.findByIdAndRemove(decodedToken.id);
     response.status(204).end();
   } catch (exception) {
     next(exception)
