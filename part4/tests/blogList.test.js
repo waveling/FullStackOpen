@@ -199,6 +199,22 @@ test('a valid blog can be added to the list', async () => {
 
 });
 
+//Requests with improper tokens fail with status code 401
+test('request with false token fails with proper status code', async () => {
+  const newBlog = {
+    title: "Test Blog", 
+    author: "John Doe", 
+    url: "https://somerandomurl.com/", 
+    likes: 10, 
+  }
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `bearer falsetoken`)
+    .send(newBlog)
+    .expect(401)
+})
+
 //Test that if no "likes"-value is given, it defaults to 0
 test('likes-value defaults to one', async () => {
   //likes-value is missing:
