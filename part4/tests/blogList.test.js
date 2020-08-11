@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const bcrypt = require('bcrypt');
 const app = require('../app');
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
 const api = supertest(app);
+let token = null;
 
 const initialBlogs = [ 
   { 
@@ -117,6 +119,22 @@ describe('when there is initially one user in db', () => {
 //Cleans the database before each test, and makes sure the db is the same before each test.
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
+
+  const passwordHash = await bcrypt.hash('salasana', 10)
+  const user = new User({
+    username: 'root',
+    name: 'Superuser',
+    passwordHash,
+  })
+
+  const savedUser = await user.save()
+  const userForToken = {
+    username: savedUser.username,
+    id: savedUser._id,
+  }
+
+  token = jwt.sign(userForToken, process.env.SECRET)
 
   let blogObject = new Blog(initialBlogs[0])
   await blogObject.save()
@@ -167,6 +185,7 @@ test('a valid blog can be added to the list', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}` )
     .send(newBlog)
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -191,11 +210,13 @@ test('likes-value defaults to one', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
   
   const response = await api.get('/api/blogs')
 
   //Checks the previously added newBlog for likes-value:
+  console.log('response:',response.body)
   const likes = response.body[2].likes;
 
   expect(likes).toBe(0)
@@ -211,6 +232,7 @@ test('validate title and url-properties', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(400)
 });
@@ -219,7 +241,7 @@ test('validate title and url-properties', async () => {
 describe('dummyTest', () => {
   test('dummy returns one', () => {
     
-    const result = listHelper.dummy(blogs);
+    const result = listHelper.dummy(initialBlogs);
     expect(result).toBe(1);
   });
 });
@@ -227,25 +249,25 @@ describe('dummyTest', () => {
 //Calculates the total likes of all the blogs in the list
 describe('totalLikes', () => {
   test('total likes combined', () => {
-    expect(listHelper.totalLikes(blogs)).toBe(12);
+    expect(listHelper.totalLikes(initialBlogs)).toBe(36);
   });
 });
 
 describe('favoriteBlog', () => {
   test('search for the blog with most likes', () => {
-    expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2]);
+    expect(listHelper.favoriteBlog(initialBlogs)).toEqual(initialBlogs[2]);
   });
 });
 
 describe('mostBlogs', () => {
   test('search for author with most blogs', () => {
-    expect(listHelper.mostBlogs(blogs)).toEqual({ author: 'Robert C. Martin', blogs: 3 });
+    expect(listHelper.mostBlogs(initialBlogs)).toEqual({ author: 'Robert C. Martin', blogs: 3 });
   });
 });
 
 describe('mostLikes', () => {
   test('author with most likes', () => {
-    expect(listHelper.mostLikes(blogs)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
+    expect(listHelper.mostLikes(initialBlogs)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   });
 });
 
