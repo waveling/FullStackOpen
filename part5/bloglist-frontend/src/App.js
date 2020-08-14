@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
+import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -30,24 +31,27 @@ const App = () => {
     try {
       const user = await loginService.login({
         username, password,
-      })
+      });
 
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
-      )
+      );
       
       blogService.setToken(user.token);
       setUser(user);
       setUsername('');
       setPassword('');
-      console.log('Logged in succesfully!')
-      console.log(user)
     } catch (exception) {
-      console.log('Wrong credentials!')
+      console.log('Wrong credentials!');
       setTimeout(() => {
-        console.log('...')
+        console.log('setNotification');
       }, 3500);
     }
+  };
+
+  const handleBlog = (event) => {
+    event.preventDefault();
+
   }
 
   const handleLogout = () => {
@@ -71,6 +75,9 @@ const App = () => {
           <div>
             <p>{user.name} logged in!</p>
             <button onClick={handleLogout}>logout</button>
+            <BlogForm 
+              handleBlog={handleBlog}
+            />
             <h2>Blogs</h2>
             <div>
               {
