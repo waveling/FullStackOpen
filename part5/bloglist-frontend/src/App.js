@@ -10,6 +10,9 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [newAuthor, setNewAuthor] = useState('');
+  const [newUrl, setNewUrl] = useState('');
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -49,10 +52,36 @@ const App = () => {
     }
   };
 
-  const handleBlog = (event) => {
+  const addBlog = (event) => {
     event.preventDefault();
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    };
 
-  }
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      });
+    setNewUrl('');
+    setNewTitle('');
+    setNewAuthor('');
+
+  };
+
+  const handleTitleChange = (event) => {
+    setNewTitle(event.target.value);
+  };
+
+  const handleAuthorChange = (event) => {
+    setNewAuthor(event.target.value);
+  };
+
+  const handleUrlChange = (event) => {
+    setNewUrl(event.target.value);
+  };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogAppUser');
@@ -73,10 +102,18 @@ const App = () => {
           />
         : 
           <div>
-            <p>{user.name} logged in!</p>
-            <button onClick={handleLogout}>logout</button>
+            <p>{user.name} is logged in</p>
+            <button 
+              onClick={handleLogout}
+              style={{width: '100px', backgroundColor: 'lightblue', border: 'none', borderRadius: '20px', height: '30px'}}>Logout</button>
             <BlogForm 
-              handleBlog={handleBlog}
+              addBlog={addBlog}
+              newTitle={newTitle}
+              newAuthor={newAuthor}
+              newUrl={newUrl}
+              handleTitleChange={handleTitleChange}
+              handleAuthorChange={handleAuthorChange}
+              handleUrlChange={handleUrlChange}
             />
             <h2>Blogs</h2>
             <div>
