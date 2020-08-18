@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
+import Notification from './components/Notification';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -10,14 +11,14 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [newTitle, setNewTitle] = useState('');
-  const [newAuthor, setNewAuthor] = useState('');
-  const [newUrl, setNewUrl] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const test = async () => {
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
+    }
+    test();
   }, []);
 
   useEffect(() => {
@@ -45,42 +46,14 @@ const App = () => {
       setUsername('');
       setPassword('');
     } catch (exception) {
-      console.log('Wrong credentials!');
+      setNotification({
+        message: 'Wrong credentials',
+        type: 'error',
+      })
       setTimeout(() => {
-        console.log('setNotification');
+        setNotification(null);
       }, 3500);
     }
-  };
-
-  const addBlog = (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    };
-
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-      });
-    setNewUrl('');
-    setNewTitle('');
-    setNewAuthor('');
-
-  };
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value);
-  };
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value);
-  };
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value);
   };
 
   const handleLogout = () => {
@@ -90,6 +63,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notification} />
       {
         user === null
         ? 
@@ -107,13 +81,9 @@ const App = () => {
               onClick={handleLogout}
               style={{width: '100px', backgroundColor: 'lightblue', border: 'none', borderRadius: '20px', height: '30px'}}>Logout</button>
             <BlogForm 
-              addBlog={addBlog}
-              newTitle={newTitle}
-              newAuthor={newAuthor}
-              newUrl={newUrl}
-              handleTitleChange={handleTitleChange}
-              handleAuthorChange={handleAuthorChange}
-              handleUrlChange={handleUrlChange}
+              blogs={blogs}
+              setBlogs={setBlogs}
+              setNotification={setNotification}
             />
             <h2>Blogs</h2>
             <div>
