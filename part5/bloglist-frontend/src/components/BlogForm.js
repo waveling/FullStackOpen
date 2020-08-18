@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import blogService from '../services/blogs';
 
 const formStyle = {
   display: 'flex',
@@ -6,7 +7,48 @@ const formStyle = {
   maxWidth: '300px'
 };
 
-const BlogForm = ({ addBlog, newTitle, newAuthor, handleTitleChange, handleAuthorChange, newUrl, handleUrlChange }) => {
+const BlogForm = ({ blogs, setBlogs, setNotification }) => {
+  const [newTitle, setNewTitle] = useState('');
+  const [newAuthor, setNewAuthor] = useState('');
+  const [newUrl, setNewUrl] = useState('');
+
+  const addBlog = (event) => {
+    event.preventDefault();
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    };
+
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      });
+    setNewUrl('');
+    setNewTitle('');
+    setNewAuthor('');
+    setNotification({
+      message: `${newTitle} added to the blog list!`,
+      type: 'success'
+    })
+    setTimeout(() => {
+      setNotification(null)
+    }, 3500)
+  };
+
+  const handleTitleChange = (event) => {
+    setNewTitle(event.target.value);
+  };
+
+  const handleAuthorChange = (event) => {
+    setNewAuthor(event.target.value);
+  };
+
+  const handleUrlChange = (event) => {
+    setNewUrl(event.target.value);
+  };
+
   return (
     <div>
       <h2>Add new blog</h2>
@@ -14,7 +56,7 @@ const BlogForm = ({ addBlog, newTitle, newAuthor, handleTitleChange, handleAutho
         <p>Title:<input value={newTitle} onChange={handleTitleChange} ></input></p>
         <p>Author:<input value={newAuthor} onChange={handleAuthorChange} ></input></p>
         <p>Url:<input value={newUrl} onChange={handleUrlChange}></input></p>
-        <button type='submit' style={{width: '100px', backgroundColor: 'lightblue', border: 'none', borderRadius: '20px', height: '30px'}}>Add Blog</button>
+        <button type='submit'>Add Blog</button>
       </form>
     </div>
   )

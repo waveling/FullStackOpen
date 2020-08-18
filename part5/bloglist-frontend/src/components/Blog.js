@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 const Blog = ({ blog }) => {
   return (
     <ul>
@@ -8,4 +8,4 @@ const Blog = ({ blog }) => {
 }
 
 
-export default Blog
+export default Blog;
