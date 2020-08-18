@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -80,11 +81,13 @@ const App = () => {
             <button 
               onClick={handleLogout}
               style={{width: '100px', backgroundColor: 'lightblue', border: 'none', borderRadius: '20px', height: '30px'}}>Logout</button>
-            <BlogForm 
-              blogs={blogs}
-              setBlogs={setBlogs}
-              setNotification={setNotification}
-            />
+            <Togglable buttonLabel='Add Blog'>
+              <BlogForm 
+                blogs={blogs}
+                setBlogs={setBlogs}
+                setNotification={setNotification}
+              />
+            </Togglable>
             <h2>Blogs</h2>
             <div>
               {
