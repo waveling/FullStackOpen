@@ -29,7 +29,7 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
     setNewTitle('');
     setNewAuthor('');
     setNotification({
-      message: `${newTitle} added to the blog list!`,
+      text: `${newTitle} added to the blog list!`,
       type: 'success'
     })
     setTimeout(() => {
