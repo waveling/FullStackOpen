@@ -47,7 +47,7 @@ const App = () => {
       setPassword('');
     } catch (exception) {
       setNotification({
-        message: 'Wrong credentials',
+        text: 'Wrong credentials',
         type: 'error',
       })
       setTimeout(() => {
