@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
@@ -62,6 +62,17 @@ const App = () => {
     setUser(null);
   }
 
+  const blogFormRef = useRef();
+
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility();
+    blogService
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
+  }
+
   return (
     <div>
       <Notification message={notification} />
@@ -81,11 +92,12 @@ const App = () => {
             <button 
               onClick={handleLogout}
               style={{width: '100px', backgroundColor: 'lightblue', border: 'none', borderRadius: '20px', height: '30px'}}>Logout</button>
-            <Togglable buttonLabel='Add Blog'>
+            <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
               <BlogForm 
                 blogs={blogs}
                 setBlogs={setBlogs}
                 setNotification={setNotification}
+                createBlog={addBlog}
               />
             </Togglable>
             <h2>Blogs</h2>

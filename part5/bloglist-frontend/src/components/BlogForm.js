@@ -7,7 +7,7 @@ const formStyle = {
   maxWidth: '300px'
 };
 
-const BlogForm = ({ blogs, setBlogs, setNotification }) => {
+const BlogForm = ({ blogs, setBlogs, setNotification, createBlog }) => {
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
   const [newUrl, setNewUrl] = useState('');
@@ -20,11 +20,7 @@ const BlogForm = ({ blogs, setBlogs, setNotification }) => {
       url: newUrl
     };
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-      });
+    createBlog(blogObject);
     setNewUrl('');
     setNewTitle('');
     setNewAuthor('');
