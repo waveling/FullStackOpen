@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs';
 
 const formStyle = {
   display: 'flex',
@@ -7,7 +6,7 @@ const formStyle = {
   maxWidth: '300px'
 };
 
-const BlogForm = ({ blogs, setBlogs, setNotification, createBlog }) => {
+const BlogForm = ({ setNotification, createBlog }) => {
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
   const [newUrl, setNewUrl] = useState('');
