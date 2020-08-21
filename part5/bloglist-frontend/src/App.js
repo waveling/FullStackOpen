@@ -93,7 +93,30 @@ const App = () => {
       }, 3500)
 
     }
-  }
+  };
+
+  const handleDelete = async (blog) => {
+    try {
+      await blogService.deleteBlog(blog.id);
+      setNotification({
+        text: `blog ${blog.title} by ${blog.author} deleted`,
+        type: 'success'
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3500);
+      const updatedBlogList = blogs.filter((item) => item.id !== blog.id);
+      setBlogs(updatedBlogList);
+    } catch (error) {
+      setNotification({
+        text: 'Couldn\'t delete the blog!',
+        type: 'error',
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3500)
+    }
+  };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogAppUser');
@@ -148,7 +171,8 @@ const App = () => {
                       key={blog.id} 
                       blog={blog} 
                       user={user}
-                      handleLikes={handleLikes}  
+                      handleLikes={handleLikes}
+                      handleDelete={handleDelete}  
                       />
                 )
               }
