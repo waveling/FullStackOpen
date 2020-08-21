@@ -22,6 +22,16 @@ button {
   font-family: 'Courier New', Courier, monospace;
 }
 
+.like {
+  background-color: lightskyblue;
+
+}
+
+.remove {
+  background-color: lightpink;
+  margin: 20px;
+}
+
 .blogItem {
   font-family: sans-serif;
   border: solid;
@@ -41,6 +51,7 @@ button {
   padding: 10px;
   margin-bottom: 10px;
   width: fit-content;
+  position: fixed;
 }
 
 .error {
@@ -52,5 +63,6 @@ button {
   padding: 10px;
   margin-bottom: 10px;
   width: fit-content;
+  position: fixed;
 }
 
