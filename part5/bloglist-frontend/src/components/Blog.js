@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 
 const Blog = ({ user, blog, handleLikes, handleDelete }) => {
-  const [details, setDetails] = useState(true)
-
-  const show = { display: details ? 'none' : '' }
+  const [details, setDetails] = useState(false)
 
   const handleDetails = () => {
     setDetails(!details)
@@ -31,18 +29,27 @@ const Blog = ({ user, blog, handleLikes, handleDelete }) => {
   return (
     <div className='blogItem'>
       <ul>
-        {blog.title} by {blog.author}
-        <button className='detailButton' onClick={handleDetails}>{details ? 'show' : 'hide'}</button>
-        <div style={show}>
-          <p>Likes: {blog.likes}</p>
-          <p>Url: {blog.url}</p>
-          <p>User: {blog.user ? blog.user.name : 'N/A'}</p>
-          <button onClick={updateLikes} className='like'>like</button>
-          {
-            authorizeRemove(user.name) &&
-             <button onClick={removeBlog} className='remove'>remove</button>
-          }
-        </div>
+        <p className='title' >
+          {blog.title}
+          <button className='detailButton' onClick={handleDetails}>{details ? 'show' : 'hide'}</button>
+        </p>
+        <p className='author'>
+          {blog.author}
+        </p>
+        {
+          details && (
+            <div>
+              <p>Likes: {blog.likes}</p>
+              <p>Url: {blog.url}</p>
+              <p>User: {blog.user ? blog.user.name : 'N/A'}</p>
+              <button onClick={updateLikes} className='like'>like</button>
+              {
+                authorizeRemove(user.name) &&
+                <button onClick={removeBlog} className='remove'>remove</button>
+              }
+            </div>
+          )
+        }
       </ul>
     </div>
   )
