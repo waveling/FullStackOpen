@@ -33,8 +33,7 @@ describe('<Blog />', () => {
     )
   })
 
-  test('render title and author',() => {
-    component.debug()
+  test('render title and author', () => {
     expect(component.container.querySelector('.title')).toHaveTextContent(
       blog.title
     )
@@ -43,6 +42,10 @@ describe('<Blog />', () => {
     )
     expect(component.queryByText(blog.url)).not.toBeInTheDocument()
     expect(component.queryByText('like')).not.toBeInTheDocument()
+  })
+
+  test('additional information can be toggled', () => {
+    
   })
 
 })
