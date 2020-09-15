@@ -31,7 +31,7 @@ const Blog = ({ user, blog, handleLikes, handleDelete }) => {
       <ul>
         <p className='title' >
           {blog.title}
-          <button className='detailButton' onClick={handleDetails}>{details ? 'show' : 'hide'}</button>
+          <button className='detailButton' onClick={handleDetails}>{details ? 'hide' : 'show'}</button>
         </p>
         <p className='author'>
           {blog.author}
