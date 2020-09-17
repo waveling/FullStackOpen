@@ -45,7 +45,7 @@ describe('<Blog />', () => {
   })
 
   test('additional information can be toggled', () => {
-    
+    expect
   })
 
 })
