@@ -8,7 +8,7 @@ describe('<Blog />', () => {
   const user = {
     id: 'abcdefghijklmn',
     name: 'Itsa Test',
-    username: 'testerbot'
+    username: 'testerbot',
   }
 
   const blog = {
@@ -19,18 +19,13 @@ describe('<Blog />', () => {
     user: {
       id: 'abcdefghijklmn',
       name: 'Itsa Test',
-      username: 'testerbot'
+      username: 'testerbot',
     },
-    id: 'iuhsdiufs8fsdhfs8fsjdhf9'
+    id: 'iuhsdiufs8fsdhfs8fsjdhf9',
   }
 
   beforeEach(() => {
-    component = render(
-      <Blog
-        blog={blog}
-        user={user}
-      />
-    )
+    component = render(<Blog blog={blog} user={user} />)
   })
 
   test('render title and author', () => {
@@ -44,8 +39,5 @@ describe('<Blog />', () => {
     expect(component.queryByText('like')).not.toBeInTheDocument()
   })
 
-  test('additional information can be toggled', () => {
-    
-  })
-
+  test('additional information can be toggled', () => {})
 })
