@@ -2,9 +2,9 @@ button {
   width: 100px;
   background-color: whitesmoke;
   border: solid 1px;
-  border-color: rgba(0,0,0,0.1);
+  border-color: rgba(0, 0, 0, 0.1);
   box-shadow: 1px 2px 2px lightslategrey;
-  border-radius: 20px; 
+  border-radius: 20px;
   height: 30px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -19,12 +19,11 @@ button {
   border-radius: 5px;
   border: none;
   background-color: lightblue;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .like {
   background-color: lightskyblue;
-
 }
 
 .remove {
@@ -65,4 +64,3 @@ button {
   width: fit-content;
   position: fixed;
 }
-
