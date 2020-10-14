@@ -22,7 +22,7 @@ describe('Bloglist app', function () {
             cy.contains('Itsa Test is logged in')
         })
 
-        it.only('fails with wrong credentials', function () {
+        it('fails with wrong credentials', function () {
             cy.contains('login').click()
             cy.get('#username').type('testerbot')
             cy.get('#password').type('wrongpassword')
@@ -32,6 +32,24 @@ describe('Bloglist app', function () {
                 .should('contain', 'Wrong credentials')
                 .and('have.css', 'color', 'rgb(255, 0, 0)')
                 .and('have.css', 'border-style', 'solid')
+        })
+    })
+
+    describe('When logged in', function () {
+        beforeEach(function () {
+            cy.contains('login').click()
+            cy.get('#username').type('testerbot')
+            cy.get('#password').type('salasana')
+            cy.get('#login-button').click()
+        })
+        it('A blog can be created', function () {
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type('A Test Blog Created By Cypress')
+            cy.get('.authorInput').type('Fictional Testwriter')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.contains('A Test Blog Created By Cypress')
         })
     })
 })

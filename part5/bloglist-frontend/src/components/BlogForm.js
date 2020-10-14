@@ -72,7 +72,9 @@ const BlogForm = ({ setNotification, createBlog }) => {
                         onChange={handleUrlChange}
                     ></input>
                 </p>
-                <button type="submit">Add Blog</button>
+                <button className="submit-blog-button" type="submit">
+                    Add Blog
+                </button>
             </form>
         </div>
     )
