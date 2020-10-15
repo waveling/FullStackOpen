@@ -15,11 +15,11 @@ const App = () => {
     const [notification, setNotification] = useState(null)
 
     useEffect(() => {
-        const test = async () => {
+        const getAllBlogs = async () => {
             const blogs = await blogService.getAll()
             setBlogs(blogs)
         }
-        test()
+        getAllBlogs()
     }, [])
 
     useEffect(() => {
@@ -35,11 +35,13 @@ const App = () => {
         event.preventDefault()
         try {
             const user = await loginService.login({
-                username, password,
+                username,
+                password,
             })
 
             window.localStorage.setItem(
-                'loggedBlogAppUser', JSON.stringify(user)
+                'loggedBlogAppUser',
+                JSON.stringify(user)
             )
 
             blogService.setToken(user.token)
@@ -68,30 +70,25 @@ const App = () => {
 
             setNotification({
                 text: `You liked the blog ${blog.title}`,
-                type: 'success'
+                type: 'success',
             })
             setTimeout(() => {
                 setNotification(null)
             }, 3500)
 
             const updatedBlogList = blogs.map((item) =>
-                item.id === blog.id
-                    ? { ...item, likes: item.likes + 1 }
-                    : item
+                item.id === blog.id ? { ...item, likes: item.likes + 1 } : item
             )
 
             setBlogs(updatedBlogList)
-
         } catch (error) {
-
             setNotification({
-                text: 'Couldn\'t update blog',
-                type: 'error'
+                text: "Couldn't update blog",
+                type: 'error',
             })
             setTimeout(() => {
                 setNotification(null)
             }, 3500)
-
         }
     }
 
@@ -100,7 +97,7 @@ const App = () => {
             await blogService.deleteBlog(blog.id)
             setNotification({
                 text: `blog ${blog.title} by ${blog.author} deleted`,
-                type: 'success'
+                type: 'success',
             })
             setTimeout(() => {
                 setNotification(null)
@@ -109,7 +106,7 @@ const App = () => {
             setBlogs(updatedBlogList)
         } catch (error) {
             setNotification({
-                text: 'Couldn\'t delete the blog!',
+                text: "Couldn't delete the blog!",
                 type: 'error',
             })
             setTimeout(() => {
@@ -127,59 +124,49 @@ const App = () => {
 
     const addBlog = (blogObject) => {
         blogFormRef.current.toggleVisibility()
-        blogService
-            .create(blogObject)
-            .then(returnedBlog => {
-                setBlogs(blogs.concat(returnedBlog))
-            })
+        blogService.create(blogObject).then((returnedBlog) => {
+            setBlogs(blogs.concat(returnedBlog))
+        })
     }
 
     return (
         <div>
             <Notification message={notification} />
-            {
-                user === null
-                    ?
-                    <LoginForm
-                        handleLogin={handleLogin}
-                        username={username}
-                        password={password}
-                        setUsername={setUsername}
-                        setPassword={setPassword}
-                    />
-                    :
+            {user === null ? (
+                <LoginForm
+                    handleLogin={handleLogin}
+                    username={username}
+                    password={password}
+                    setUsername={setUsername}
+                    setPassword={setPassword}
+                />
+            ) : (
+                <div>
+                    <p>{user.name} is logged in</p>
+                    <button onClick={handleLogout}>Logout</button>
+                    <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
+                        <BlogForm
+                            blogs={blogs}
+                            setBlogs={setBlogs}
+                            setNotification={setNotification}
+                            createBlog={addBlog}
+                        />
+                    </Togglable>
+                    <h2>Blogs</h2>
                     <div>
-                        <p>{user.name} is logged in</p>
-                        <button
-                            onClick={handleLogout}
-                        >Logout</button>
-                        <Togglable buttonLabel='Add Blog' ref={blogFormRef}>
-                            <BlogForm
-                                blogs={blogs}
-                                setBlogs={setBlogs}
-                                setNotification={setNotification}
-                                createBlog={addBlog}
-                            />
-                        </Togglable>
-                        <h2>Blogs</h2>
-                        <div>
-                            {
-                                blogs
-                                    .sort((a, b) => b.likes - a.likes)
-                                    .map(blog =>
-                                        <Blog
-                                            key={blog.id}
-                                            blog={blog}
-                                            user={user}
-                                            handleLikes={handleLikes}
-                                            handleDelete={handleDelete}
-                                        />
-                                    )
-                            }
-                        </div>
+                        {blogs
+                            .sort((a, b) => b.likes - a.likes)
+                            .map((blog) => (
+                                <Blog
+                                    key={blog.id}
+                                    blog={blog}
+                                    handleLikes={handleLikes}
+                                    handleDelete={handleDelete}
+                                />
+                            ))}
                     </div>
-
-            }
+                </div>
+            )}
         </div>
     )
 }

@@ -37,11 +37,19 @@ describe('Bloglist app', function () {
 
     describe('When logged in', function () {
         beforeEach(function () {
-            cy.contains('login').click()
-            cy.get('#username').type('testerbot')
-            cy.get('#password').type('salasana')
-            cy.get('#login-button').click()
+            cy.request('POST', 'http://localhost:3003/api/login', {
+                username: 'testerbot',
+                name: 'Itsa Test',
+                password: 'salasana',
+            }).then((response) => {
+                localStorage.setItem(
+                    'loggedBlogappUser',
+                    JSON.stringify(response.body)
+                )
+                cy.visit('http://localhost:3000')
+            })
         })
+
         it('A blog can be created', function () {
             cy.contains('Add Blog').click()
             cy.get('.titleInput').type('A Test Blog Created By Cypress')

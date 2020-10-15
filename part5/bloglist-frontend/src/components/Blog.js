@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ user, blog, handleLikes, handleDelete }) => {
+const Blog = ({ blog, handleLikes, handleDelete }) => {
     const [details, setDetails] = useState(false)
 
     const handleDetails = () => {
@@ -25,9 +26,8 @@ const Blog = ({ user, blog, handleLikes, handleDelete }) => {
     }
 
     const authorizeRemove = (identifiedUser) => {
-        if (blog.user && identifiedUser === blog.user.name) {
-            return true
-        }
+        const user = blogService.getUser()
+        return user.id === identifiedUser
     }
 
     return (
@@ -48,7 +48,7 @@ const Blog = ({ user, blog, handleLikes, handleDelete }) => {
                         <button onClick={updateLikes} className="like">
                             like
                         </button>
-                        {authorizeRemove(user.name) && (
+                        {authorizeRemove(blog.user.id) && (
                             <button onClick={removeBlog} className="remove">
                                 remove
                             </button>
