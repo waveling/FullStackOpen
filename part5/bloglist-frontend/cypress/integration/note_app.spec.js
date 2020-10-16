@@ -75,6 +75,13 @@ describe('Bloglist app', function () {
             cy.get('.submit-blog-button').click()
 
             cy.get('.detailButton').click()
+            cy.get('.remove').click()
+            cy.request('GET', 'http://localhost:3003/api/blogs').then(function (
+                response
+            ) {
+                const data = response.body
+                expect(data).to.have.length(0)
+            })
         })
     })
 })
