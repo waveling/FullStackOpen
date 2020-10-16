@@ -75,16 +75,18 @@ describe('Bloglist app', function () {
             cy.get('.submit-blog-button').click()
 
             cy.get('.detailButton').click()
-            cy.get('.remove').click()
-            cy.request('GET', 'http://localhost:3003/api/blogs').then(function (
-                response
-            ) {
-                const data = response.body
-                expect(data).to.have.length(0)
-            })
+            cy.get('.detailedInfo').find('button.remove').as('removeButton')
+            cy.get('@removeButton').click()
+
+            cy.request('GET', 'http://localhost:3003/api/blogs').then(
+                (response) => {
+                    const data = response.body
+                    expect(data).to.have.length(0)
+                }
+            )
         })
 
-        it.only('Blogs are ordered based on likes', function () {
+        it('Blogs are ordered based on likes', function () {
             cy.contains('Add Blog').click()
             cy.get('.titleInput').type('A Test Blog Created By Cypress')
             cy.get('.authorInput').type('Fictional Testwriter')
