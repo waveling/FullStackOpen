@@ -6,30 +6,17 @@ const formStyle = {
     maxWidth: '300px',
 }
 
-const BlogForm = ({ setNotification, createBlog }) => {
+const BlogForm = ({ createBlog }) => {
     const [newTitle, setNewTitle] = useState('')
     const [newAuthor, setNewAuthor] = useState('')
     const [newUrl, setNewUrl] = useState('')
 
-    const addBlog = (event) => {
+    const handleAddBlog = (event) => {
         event.preventDefault()
-        const blogObject = {
-            title: newTitle,
-            author: newAuthor,
-            url: newUrl,
-        }
-
-        createBlog(blogObject)
+        createBlog(newTitle, newAuthor, newUrl)
         setNewUrl('')
         setNewTitle('')
         setNewAuthor('')
-        setNotification({
-            text: `${newTitle} added to the blog list!`,
-            type: 'success',
-        })
-        setTimeout(() => {
-            setNotification(null)
-        }, 3500)
     }
 
     const handleTitleChange = (event) => {
@@ -47,7 +34,7 @@ const BlogForm = ({ setNotification, createBlog }) => {
     return (
         <div>
             <h2>Add new blog</h2>
-            <form className="form" onSubmit={addBlog} style={formStyle}>
+            <form className="form" onSubmit={handleAddBlog} style={formStyle}>
                 <p>
                     Title:
                     <input

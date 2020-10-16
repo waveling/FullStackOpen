@@ -122,11 +122,32 @@ const App = () => {
 
     const blogFormRef = useRef()
 
-    const addBlog = (blogObject) => {
-        blogFormRef.current.toggleVisibility()
-        blogService.create(blogObject).then((returnedBlog) => {
-            setBlogs(blogs.concat(returnedBlog))
-        })
+    const addBlog = async (title, author, url) => {
+        try {
+            blogFormRef.current.toggleVisibility()
+            const blog = await blogService.create({
+                title,
+                author,
+                url,
+            })
+            setNotification({
+                text: 'New blog was added!',
+                type: 'success',
+            })
+            setTimeout(() => {
+                setNotification(null)
+            }, 3500)
+            const user = await blogService.getUser()
+            setBlogs(blogs.concat({ ...blog, user }))
+        } catch (error) {
+            setNotification({
+                text: 'Blog not added',
+                type: 'error',
+            })
+            setTimeout(() => {
+                setNotification(null)
+            }, 3500)
+        }
     }
 
     return (
@@ -145,12 +166,7 @@ const App = () => {
                     <p>{user.name} is logged in</p>
                     <button onClick={handleLogout}>Logout</button>
                     <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-                        <BlogForm
-                            blogs={blogs}
-                            setBlogs={setBlogs}
-                            setNotification={setNotification}
-                            createBlog={addBlog}
-                        />
+                        <BlogForm createBlog={addBlog} />
                     </Togglable>
                     <h2>Blogs</h2>
                     <div>

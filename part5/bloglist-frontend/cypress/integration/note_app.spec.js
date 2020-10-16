@@ -37,17 +37,9 @@ describe('Bloglist app', function () {
 
     describe('When logged in', function () {
         beforeEach(function () {
-            cy.request('POST', 'http://localhost:3003/api/login', {
-                username: 'testerbot',
-                name: 'Itsa Test',
-                password: 'salasana',
-            }).then((response) => {
-                localStorage.setItem(
-                    'loggedBlogappUser',
-                    JSON.stringify(response.body)
-                )
-                cy.visit('http://localhost:3000')
-            })
+            cy.get('#username').type('testerbot')
+            cy.get('#password').type('salasana')
+            cy.get('#login-button').click()
         })
 
         it('A blog can be created', function () {
@@ -58,6 +50,31 @@ describe('Bloglist app', function () {
             cy.get('.submit-blog-button').click()
 
             cy.contains('A Test Blog Created By Cypress')
+        })
+
+        it('A blog can be liked', function () {
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type('A Test Blog Created By Cypress')
+            cy.get('.authorInput').type('Fictional Testwriter')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.contains('show').click()
+            cy.get('.like').click()
+            cy.get('.likes').should('contain', '1')
+
+            cy.get('.like').click()
+            cy.get('.likes').should('contain', '2')
+        })
+
+        it.only('User can remove their blog', function () {
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type('A Test Blog Created By Cypress')
+            cy.get('.authorInput').type('Fictional Testwriter')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.get('.detailButton').click()
         })
     })
 })

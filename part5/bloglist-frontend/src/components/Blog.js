@@ -27,7 +27,9 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
 
     const authorizeRemove = (identifiedUser) => {
         const user = blogService.getUser()
-        return user.id === identifiedUser
+        if (user.id === identifiedUser) {
+            return true
+        }
     }
 
     return (
@@ -41,10 +43,11 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
                 </p>
                 <p className="author">{blog.author}</p>
                 {details && (
-                    <div>
+                    <div className="detailedInfo">
                         <p className="likes">Likes: {blog.likes}</p>
                         <p className="url">Url: {blog.url}</p>
-                        <p>User: {blog.user ? blog.user.name : 'N/A'}</p>
+                        {console.log(blog.user)}
+                        <p>User: {blog.user.username}</p>
                         <button onClick={updateLikes} className="like">
                             like
                         </button>
