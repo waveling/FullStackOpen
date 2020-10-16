@@ -46,7 +46,6 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
                     <div className="detailedInfo">
                         <p className="likes">Likes: {blog.likes}</p>
                         <p className="url">Url: {blog.url}</p>
-                        {console.log(blog.user)}
                         <p>User: {blog.user.username}</p>
                         <button onClick={updateLikes} className="like">
                             like

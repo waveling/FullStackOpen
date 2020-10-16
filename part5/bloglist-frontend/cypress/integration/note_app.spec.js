@@ -67,7 +67,7 @@ describe('Bloglist app', function () {
             cy.get('.likes').should('contain', '2')
         })
 
-        it.only('User can remove their blog', function () {
+        it('User can remove blogs they have added', function () {
             cy.contains('Add Blog').click()
             cy.get('.titleInput').type('A Test Blog Created By Cypress')
             cy.get('.authorInput').type('Fictional Testwriter')
@@ -81,6 +81,43 @@ describe('Bloglist app', function () {
             ) {
                 const data = response.body
                 expect(data).to.have.length(0)
+            })
+        })
+
+        it.only('Blogs are ordered based on likes', function () {
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type('A Test Blog Created By Cypress')
+            cy.get('.authorInput').type('Fictional Testwriter')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type('Another Test Blog Created By Cypress')
+            cy.get('.authorInput').type('Fictional Testwriter(2)')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.contains('Add Blog').click()
+            cy.get('.titleInput').type(
+                'Yet Another Test Blog Created By Cypress'
+            )
+            cy.get('.authorInput').type('Fictional Testwriter(3)')
+            cy.get('.urlInput').type('http://testurl.com')
+            cy.get('.submit-blog-button').click()
+
+            cy.contains('Yet Another').parent().find('button').as('showButton')
+            cy.get('@showButton').click()
+
+            cy.contains('Yet Another').parent().find('.like').as('likeButton')
+            cy.get('@likeButton').click()
+            cy.get('@showButton').click()
+
+            cy.get('.detailButton')
+                .should('have.length', 3)
+                .click({ multiple: true })
+
+            cy.get('.likes').then((likes) => {
+                expect(likes[0]).to.contain(1)
             })
         })
     })
