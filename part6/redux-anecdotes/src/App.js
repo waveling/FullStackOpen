@@ -1,15 +1,14 @@
 import React from 'react'
 import Anecdotes from './components/AnecdoteList'
-/* import AnecdoteForm from './components/AnecdoteForms' */
+import AnecdoteForm from './components/AnecdoteForm'
 import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
-    const vote = (id) => {
-        console.log('vote', id)
-    }
-
     return (
-        <Anecdotes />
+        <div>
+            <AnecdoteForm />
+            <Anecdotes />
+        </div>
     )
 }
 
