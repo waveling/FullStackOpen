@@ -3,6 +3,6 @@ const notificationReducer = (state = [], action) => {
         case 'someaction':
             return 'something'
         default:
-            return 'something else'
+            return 'testing'
     }
 }
