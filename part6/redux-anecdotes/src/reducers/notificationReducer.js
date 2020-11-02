@@ -1,8 +1,12 @@
 const notificationReducer = (state = [], action) => {
     switch (action.type) {
-        case 'someaction':
-            return 'something'
+        case 'SUCCESS':
+            return 'Success'
+        case 'FAILURE':
+            return 'Failure'
         default:
-            return 'testing'
+            return ''
     }
 }
+
+export default notificationReducer
