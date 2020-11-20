@@ -9,15 +9,17 @@ const App = () => {
   const [ persons, setPersons ] = useState([]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
-	const [searchParam, setSearchParam] = useState('');
-	const [successMessage, setSuccessMessage] = useState(null);
-	const [errorMessage, setErrorMessage] = useState(null);
+	const [ searchParam, setSearchParam ] = useState('');
+	const [ successMessage, setSuccessMessage ] = useState(null);
+	const [ errorMessage, setErrorMessage ] = useState(null);
 
   useEffect(() => {
-    personsService.getAll().then(response => {
-      setPersons(response.data)
-    })
-  }, [])
+		personsService
+			.getAll()
+			.then(response => {
+      	setPersons(response.data)
+    	})
+  }, []);
 
   //Event handlers for Name and Number changes in the input fields (saves these in state)
   const handleNameChange = (event) => {
@@ -26,78 +28,93 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
-  }
+	}
+	
+	const handleSearchParam = (event) => {
+		setSearchParam(event.target.value)
+	}
 	
 	//Delete person from database (prompt a confirmation)
   const handleDelete = (id, name) => {
-			return () => {
-				if (window.confirm(`Are you sure you want to delete the contact ${name}`)) {
+				const confirmed = window.confirm(`Are you sure you want to delete the contact ${name}`)
+				if (confirmed) {
 					personsService
-					.deleteContact(id)
-					.then(() => {
-						setPersons(persons.filter(person => person.id !== id));
-						setNewName('');
-						setNewNumber('');
-					})
-					}
+						.deleteContact(id)
+						.then(() => {
+							setPersons(persons.filter(person => person.id !== id));
+							setNewName('');
+							setNewNumber('');
+							setSuccessMessage(`${name} was succesfully removed from the phonebook!`)
+							setTimeout(() => {
+								setSuccessMessage(null)
+							}, 3000)
+						})
+						.catch(() => {
+							setPersons(persons.filter(person => person.id !== id))
+							setErrorMessage(`${name} was already removed from server`, 'error')
+						})
 				}
   }
 
-	//Add person to database
+	//Add or update person to database
   const addContact = event => {
-    event.preventDefault();
+		event.preventDefault();
+		
     const contactObject = {
       name: newName,
-      number: newNumber
-		}
+			number: newNumber
+		};
+
 		//If a contact with same name exists -> update contact
-    if (persons.some(person => person.name === newName)) {
-			const contact = persons.filter(person => person.name === newName)
-			if (window.confirm(`Number for contact ${newName} already exists. Do you want to replace?`))
-			personsService
-				.updateContact(contact[0].id, contactObject)
-				.then(() => {
-					personsService
-						.getAll()
-						.then(response => setPersons(response.data))
+		const oldContact = persons.find(person => person.name === newName)
+    if (oldContact) {
+			const confirmed = window.confirm(`Number for contact ${newName} already exists. Do you want to replace?`)
+			if (confirmed) {
+				personsService
+					.updateContact(oldContact.id, contactObject)
+					.then(updatedContact => {
+						setPersons(persons.map(person => person.id !== oldContact.id ? person : updatedContact.data))
+						setSuccessMessage(`Updated number for ${newName}`);
 						setNewName('');
 						setNewNumber('');
-						setSuccessMessage(`Updated number for ${newName}`)
 						setTimeout(() => {
 							setSuccessMessage(null)
 						}, 3000)
 					})
-				.catch(() => {
-					setErrorMessage(`${newName} was already deleted from the server.`);
-					setPersons(persons.filter(person => person.id !== contact[0].id));
-					setNewNumber('');
-					setNewName('');
-				})
-				setTimeout(() => {
-					setErrorMessage(null)
-				}, 3000)
+					.catch(error => {
+						console.log(error.response.data)
+						setErrorMessage(`Could not update the contact`)
+						setTimeout(() => {
+							setErrorMessage(null)
+						}, 3000)
+					})
 		//If a brand new contact -> add to persons db
-		} else {
-				setPersons(persons.concat(contactObject));
-				setNewName('');
-				setNewNumber('');  
-				personsService.createContact(contactObject);
-				personsService
-					.getAll()
-					.then(response => {
-					setPersons(response.data)
+		}} else {
+			personsService
+				.createContact(contactObject)
+				.then(() => {
+					setPersons(persons.concat(contactObject))
+					setSuccessMessage(`Added contact for ${newName}`)
+					setNewName('')
+					setNewNumber('')  
+					setTimeout(() => {
+						setSuccessMessage(null)
+					}, 3000)
 				})
-			 	setSuccessMessage(`Added contact for ${newName}`)
-				setTimeout(() => {
-				 setSuccessMessage(null)
-				}, 3000)
-			}
+				.catch(error => {
+					console.log(error.response.data.error)
+					setErrorMessage('Could not add the contact!')
+					setTimeout(() => {
+						setErrorMessage(null)
+					}, 3000)
+				})
+				}
 	}
 
-	//Event handler for setting the inputted text in state for Search input
-  const searchInput = (event) => {
-    setSearchParam(event.target.value)
-  }
+	//Defines what contacts to show based on search input
+	const displayedContacts = searchParam.length === 0
+		? persons
+		: persons.filter(person => person.name.toLowerCase().indexOf(searchParam.toLowerCase()) >= 0)
 
 
   return (
@@ -109,7 +126,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <Search 
         searchParam={searchParam} 
-        searchInput={searchInput}
+        handleSearch={handleSearchParam}
       />
       <h2>Add new contact</h2>
       <Form 
@@ -121,7 +138,7 @@ const App = () => {
       />
       <h2>Contacts</h2>
       <Display 
-        persons={persons}
+        persons={displayedContacts}
         searchParam={searchParam}
 				deleteContact={handleDelete}
       />
