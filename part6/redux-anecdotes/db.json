@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 0
+      "votes": 6
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -21,7 +21,9 @@
       "votes": 0
     },
     {
-      "id": "25170"
+      "content": "Premature optimization is the root of all evil.",
+      "id": "25170",
+      "votes": 2
     }
   ]
 }

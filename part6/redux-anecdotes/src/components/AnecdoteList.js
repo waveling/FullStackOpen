@@ -21,7 +21,7 @@ const Anecdotes = () => {
     const filter = useSelector((state) => state.filter)
     const anecdotes = useSelector((state) => state.anecdote)
     const vote = (id, content) => {
-        dispatch(addVote(content, id))
+        dispatch(addVote(id, content))
         dispatch(showNotification(content))
         setTimeout(() => {
             dispatch(hideNotification())
