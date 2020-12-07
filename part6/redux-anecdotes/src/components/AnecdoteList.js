@@ -1,31 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addVote } from '../reducers/anecdoteReducer'
-import {
-    showNotification,
-    hideNotification,
-} from '../reducers/notificationReducer'
-
-const Anecdote = ({ anecdote, handleClick }) => {
-    return (
-        <div>
-            <li> {anecdote.content} </li>
-            <div> has {anecdote.votes} votes </div>
-            <button onClick={handleClick}>Vote</button>
-        </div>
-    )
-}
+import { addVote, initializeAnecdotes } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Anecdotes = () => {
     const dispatch = useDispatch()
     const filter = useSelector((state) => state.filter)
     const anecdotes = useSelector((state) => state.anecdote)
+
+    const style = {
+        margin: 10
+    }
+
+    useEffect(() => {
+        dispatch(initializeAnecdotes())
+    }, [dispatch])
+
     const vote = (id, content) => {
-        dispatch(addVote(id, content))
-        dispatch(showNotification(content))
-        setTimeout(() => {
-            dispatch(hideNotification())
-        }, 5000)
+        dispatch(addVote(id))
+        dispatch(setNotification(`You voted "${content}"`, 5000))
     }
 
     return (
@@ -34,13 +27,15 @@ const Anecdotes = () => {
                 .filter((anecdote) => anecdote.content.includes(filter))
                 .sort((a, b) => b.votes - a.votes)
                 .map((anecdote) => (
-                    <Anecdote
-                        key={anecdote.id}
-                        anecdote={anecdote}
-                        handleClick={() => {
-                            vote(anecdote.id, anecdote.content)
-                        }}
-                    />
+                    <div key={anecdote.id} style={style}>
+                        <div>{anecdote.content}</div>
+                        <div>
+                            has {anecdote.votes} votes
+                            <button style={style} onClick={() => vote(anecdote.id, anecdote.content)}>
+                                vote
+                            </button>
+                        </div>
+                    </div>
                 ))}
         </div>
     )
