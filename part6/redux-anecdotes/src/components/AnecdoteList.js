@@ -4,7 +4,6 @@ import { addVote, initializeAnecdotes } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const Anecdotes = (props) => {
-
     const anecdotesToShow = () => {
         return props.anecdotes
     }
