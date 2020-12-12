@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, useParams } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Link, useParams, Redirect, useHistory } from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -18,7 +18,6 @@ const Anecdote = ({ anecdotes }) => {
   const padding = { padding: 10 }
   const id = useParams().id
   const anecdote = anecdotes.find(n => n.id === id)
-  console.log('anekdootti:', anecdote)
   return (
     <div style={padding}>
       <h2 style={padding}>"{anecdote.content}" by {anecdote.author}</h2>
@@ -67,6 +66,7 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -76,6 +76,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -94,11 +95,29 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
       </form>
     </div>
   )
+}
 
+const Notification = ({ anecdotes, notification }) => {
+  const notificationStyle = {
+    border: '1px solid green',
+    padding: 5,
+    width: 'max-content',
+    backgroundColor: 'rgba(0, 150, 0, 0.2)'
+  }
+
+  if (notification === '' || notification === undefined) {
+    return null
+  }
+
+  const anecdote = anecdotes.find(a => anecdotes.indexOf(a) === anecdotes.length - 1)
+
+  return (
+    <h4 style={notificationStyle}>You added: "{anecdote.content}" to the list!</h4>
+  )
 }
 
 const App = () => {
@@ -124,6 +143,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(anecdote.content)
+    setTimeout(() => {
+      setNotification('')
+    }, 2000)
   }
 
   const anecdoteById = (id) =>
@@ -143,6 +166,7 @@ const App = () => {
   return (
     <Router>
       <Menu />
+      <Notification anecdotes={anecdotes} notification={notification} />
       <Switch>
         <Route path='/anecdotes/:id'>
           <Anecdote anecdotes={anecdotes} />
