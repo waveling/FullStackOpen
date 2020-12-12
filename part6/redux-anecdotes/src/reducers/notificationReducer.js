@@ -1,4 +1,4 @@
-const notificationReducer = (state = '', action) => {
+const notificationReducer = (state = null, action) => {
     switch (action.type) {
 
         case 'SET_NOTIFICATION':
@@ -8,9 +8,12 @@ const notificationReducer = (state = '', action) => {
             return ''
 
         default:
-            return ''
+            return state
     }
 }
+
+
+let timeoutID
 
 export const setNotification = (message, duration = 5000) => {
     return async dispatch => {
@@ -18,7 +21,12 @@ export const setNotification = (message, duration = 5000) => {
             type: 'SET_NOTIFICATION',
             message
         })
-        setTimeout(() => {
+
+        if (typeof timeoutID === 'number') {
+            clearTimeout(timeoutID)
+        }
+
+        timeoutID = setTimeout(() => {
             dispatch({
                 type: 'HIDE_NOTIFICATION',
             })
