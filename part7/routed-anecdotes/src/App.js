@@ -97,6 +97,7 @@ const CreateNew = (props) => {
           <input {...info.attributes} />
         </div>
         <button type='submit'>create</button>
+        <button type='reset'>reset</button>
       </form>
     </div>
   )
