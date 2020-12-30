@@ -6,13 +6,17 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+    //still here, but once fully refactored to redux, this should go
     const [notification, setNotification] = useState(null)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const getAllBlogs = async () => {
@@ -59,6 +63,7 @@ const App = () => {
         }
     }
 
+
     const handleLikes = async (blog) => {
         try {
             await blogService.update(blog.id, {
@@ -68,12 +73,10 @@ const App = () => {
                 likes: blog.likes,
             })
 
-            setNotification({
-                text: `You liked the blog ${blog.title}`,
-                type: 'success',
-            })
+            //dispatch action that alters the state in redux store
+            dispatch({ type: 'success', text: `You liked the blog: ${blog.title}` })
             setTimeout(() => {
-                setNotification(null)
+                dispatch({ type: 'HIDE_NOTIFICATION' })
             }, 3500)
 
             const updatedBlogList = blogs.map((item) =>
@@ -82,12 +85,9 @@ const App = () => {
 
             setBlogs(updatedBlogList)
         } catch (error) {
-            setNotification({
-                text: 'Couldn\'t update blog',
-                type: 'error',
-            })
+            dispatch({ type: 'error', text: 'Could not update the blog!' })
             setTimeout(() => {
-                setNotification(null)
+                dispatch({ type: 'HIDE_NOTIFICATION' })
             }, 3500)
         }
     }
@@ -152,7 +152,7 @@ const App = () => {
 
     return (
         <div>
-            <Notification message={notification} />
+            <Notification />
             {user === null ? (
                 <LoginForm
                     handleLogin={handleLogin}
