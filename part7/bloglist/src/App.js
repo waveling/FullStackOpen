@@ -83,7 +83,7 @@ const App = () => {
             setBlogs(updatedBlogList)
         } catch (error) {
             setNotification({
-                text: "Couldn't update blog",
+                text: 'Couldn\'t update blog',
                 type: 'error',
             })
             setTimeout(() => {
@@ -106,7 +106,7 @@ const App = () => {
             setBlogs(updatedBlogList)
         } catch (error) {
             setNotification({
-                text: "Couldn't delete the blog!",
+                text: 'Couldn\'t delete the blog!',
                 type: 'error',
             })
             setTimeout(() => {
@@ -162,27 +162,27 @@ const App = () => {
                     setPassword={setPassword}
                 />
             ) : (
-                <div>
-                    <p>{user.name} is logged in</p>
-                    <button onClick={handleLogout}>Logout</button>
-                    <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-                        <BlogForm createBlog={addBlog} />
-                    </Togglable>
-                    <h2>Blogs</h2>
                     <div>
-                        {blogs
-                            .sort((a, b) => b.likes - a.likes)
-                            .map((blog) => (
-                                <Blog
-                                    key={blog.id}
-                                    blog={blog}
-                                    handleLikes={handleLikes}
-                                    handleDelete={handleDelete}
-                                />
-                            ))}
+                        <p>{user.name} is logged in</p>
+                        <button onClick={handleLogout}>Logout</button>
+                        <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
+                            <BlogForm createBlog={addBlog} />
+                        </Togglable>
+                        <h2>Blogs</h2>
+                        <div>
+                            {blogs
+                                .sort((a, b) => b.likes - a.likes)
+                                .map((blog) => (
+                                    <Blog
+                                        key={blog.id}
+                                        blog={blog}
+                                        handleLikes={handleLikes}
+                                        handleDelete={handleDelete}
+                                    />
+                                ))}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
         </div>
     )
 }
