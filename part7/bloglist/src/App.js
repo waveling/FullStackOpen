@@ -7,15 +7,13 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
-import { setReduxNotification } from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
-    //still here, but once fully refactored to redux, this should go
-    const [notification, setNotification] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -54,13 +52,10 @@ const App = () => {
             setUsername('')
             setPassword('')
         } catch (exception) {
-            setNotification({
+            dispatch(setNotification({
                 text: 'Wrong credentials',
-                type: 'error',
-            })
-            setTimeout(() => {
-                setNotification(null)
-            }, 3500)
+                style: 'error',
+            }))
         }
     }
 
@@ -75,9 +70,8 @@ const App = () => {
             })
 
             //dispatch action that alters the state in redux store
-            dispatch(setReduxNotification({
-                text: `You liked the blog: ${blog.title}`,
-                type: 'NOTIFICATION',
+            dispatch(setNotification({
+                text: `You liked the blog: "${blog.title}"`,
                 style: 'success'
             }))
 
@@ -88,33 +82,27 @@ const App = () => {
             setBlogs(updatedBlogList)
 
         } catch (error) {
-            dispatch({ type: 'SHOW_NOTIFICATION', text: 'Could not update the blog!', style: 'error' })
-            setTimeout(() => {
-                dispatch({ type: 'HIDE_NOTIFICATION' })
-            }, 3500)
+            dispatch(setNotification({
+                text: 'Could not update the blog!',
+                style: 'error'
+            }))
         }
     }
 
     const handleDelete = async (blog) => {
         try {
             await blogService.deleteBlog(blog.id)
-            setNotification({
+            dispatch(setNotification({
                 text: `blog ${blog.title} by ${blog.author} deleted`,
-                type: 'success',
-            })
-            setTimeout(() => {
-                setNotification(null)
-            }, 3500)
+                style: 'success',
+            }))
             const updatedBlogList = blogs.filter((item) => item.id !== blog.id)
             setBlogs(updatedBlogList)
         } catch (error) {
-            setNotification({
+            dispatch(setNotification({
                 text: 'Couldn\'t delete the blog!',
-                type: 'error',
-            })
-            setTimeout(() => {
-                setNotification(null)
-            }, 3500)
+                style: 'error',
+            }))
         }
     }
 
@@ -133,23 +121,17 @@ const App = () => {
                 author,
                 url,
             })
-            setNotification({
+            dispatch(setNotification({
                 text: 'New blog was added!',
-                type: 'success',
-            })
-            setTimeout(() => {
-                setNotification(null)
-            }, 3500)
+                style: 'success',
+            }))
             const user = await blogService.getUser()
             setBlogs(blogs.concat({ ...blog, user }))
         } catch (error) {
-            setNotification({
+            dispatch(setNotification({
                 text: 'Blog not added',
-                type: 'error',
-            })
-            setTimeout(() => {
-                setNotification(null)
-            }, 3500)
+                style: 'error',
+            }))
         }
     }
 

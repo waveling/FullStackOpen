@@ -17,14 +17,14 @@ const notificationReducer = (state = '', action) => {
 }
 
 //action creator for setting the notification
-export const setReduxNotification = (message) => {
+export const setNotification = (message) => {
     console.log('reduxNotiMessage', message)
     if (message === null) {
         return ''
     }
     return async dispatch => {
         dispatch({
-            type: message.type,
+            type: 'NOTIFICATION',
             text: message.text,
             style: message.style
         })
