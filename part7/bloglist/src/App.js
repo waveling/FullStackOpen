@@ -7,6 +7,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
+import { setReduxNotification } from './reducers/notificationReducer'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -74,18 +75,20 @@ const App = () => {
             })
 
             //dispatch action that alters the state in redux store
-            dispatch({ type: 'success', text: `You liked the blog: ${blog.title}` })
-            setTimeout(() => {
-                dispatch({ type: 'HIDE_NOTIFICATION' })
-            }, 3500)
+            dispatch(setReduxNotification({
+                text: `You liked the blog: ${blog.title}`,
+                type: 'NOTIFICATION',
+                style: 'success'
+            }))
 
             const updatedBlogList = blogs.map((item) =>
                 item.id === blog.id ? { ...item, likes: item.likes + 1 } : item
             )
 
             setBlogs(updatedBlogList)
+
         } catch (error) {
-            dispatch({ type: 'error', text: 'Could not update the blog!' })
+            dispatch({ type: 'SHOW_NOTIFICATION', text: 'Could not update the blog!', style: 'error' })
             setTimeout(() => {
                 dispatch({ type: 'HIDE_NOTIFICATION' })
             }, 3500)

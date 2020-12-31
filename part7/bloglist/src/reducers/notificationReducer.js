@@ -5,11 +5,9 @@
 
 
 const notificationReducer = (state = '', action) => {
-    console.log('state', state, 'action', action)
+    console.log('state:', state)
     switch (action.type) {
-        case 'success':
-            return action
-        case 'error':
+        case 'NOTIFICATION':
             return action
         case 'HIDE_NOTIFICATION':
             return ''
@@ -20,10 +18,21 @@ const notificationReducer = (state = '', action) => {
 
 //action creator for setting the notification
 export const setReduxNotification = (message) => {
-    console.log('reduxNotMessage', message)
-    return {
-        type: message.type,
-        message: message.text
+    console.log('reduxNotiMessage', message)
+    if (message === null) {
+        return ''
+    }
+    return async dispatch => {
+        dispatch({
+            type: message.type,
+            text: message.text,
+            style: message.style
+        })
+        setTimeout(() => {
+            dispatch({
+                type: 'HIDE_NOTIFICATION'
+            })
+        }, 3500)
     }
 }
 
