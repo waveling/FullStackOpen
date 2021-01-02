@@ -15,8 +15,10 @@ const App = () => {
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
 
+    //For dispatching actions from the redux-store
     const dispatch = useDispatch()
 
+    //Fetches all the blogs from the database
     useEffect(() => {
         const getAllBlogs = async () => {
             const blogs = await blogService.getAll()
@@ -25,6 +27,7 @@ const App = () => {
         getAllBlogs()
     }, [])
 
+    //Checks if the user data is already in local storage, so don't have to log in again
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
         if (loggedUserJSON) {
@@ -34,6 +37,7 @@ const App = () => {
         }
     }, [])
 
+    //Event handler for logging in
     const handleLogin = async (event) => {
         event.preventDefault()
         try {
@@ -59,7 +63,7 @@ const App = () => {
         }
     }
 
-
+    //Event handler for liking a blog
     const handleLikes = async (blog) => {
         try {
             await blogService.update(blog.id, {
@@ -89,6 +93,7 @@ const App = () => {
         }
     }
 
+    //Event handler for deleting a blog
     const handleDelete = async (blog) => {
         try {
             await blogService.deleteBlog(blog.id)
@@ -106,6 +111,7 @@ const App = () => {
         }
     }
 
+    //Event handler for logging out and removing user data from clients local storage
     const handleLogout = () => {
         window.localStorage.removeItem('loggedBlogAppUser')
         setUser(null)
@@ -113,6 +119,7 @@ const App = () => {
 
     const blogFormRef = useRef()
 
+    //Event handler for adding a blog
     const addBlog = async (title, author, url) => {
         try {
             blogFormRef.current.toggleVisibility()
