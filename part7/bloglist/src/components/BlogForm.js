@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const formStyle = {
     display: 'flex',
@@ -6,14 +9,25 @@ const formStyle = {
     maxWidth: '300px',
 }
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = (props) => {
+    const dispatch = useDispatch()
+
     const [newTitle, setNewTitle] = useState('')
     const [newAuthor, setNewAuthor] = useState('')
     const [newUrl, setNewUrl] = useState('')
 
     const handleAddBlog = (event) => {
         event.preventDefault()
-        createBlog(newTitle, newAuthor, newUrl)
+        //createBlog(newTitle, newAuthor, newUrl)
+        dispatch(addBlog({
+            title: newTitle,
+            author: newAuthor,
+            url: newUrl
+        }))
+        dispatch(setNotification({
+            text: 'New blog was added!',
+            style: 'success',
+        }))
         setNewUrl('')
         setNewTitle('')
         setNewAuthor('')

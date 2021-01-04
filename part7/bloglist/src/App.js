@@ -8,6 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initBlogs } from './reducers/blogReducer'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -20,12 +21,16 @@ const App = () => {
 
     //Fetches all the blogs from the database
     useEffect(() => {
+        dispatch(initBlogs())
+    }, [dispatch])
+
+    /* useEffect(() => {
         const getAllBlogs = async () => {
             const blogs = await blogService.getAll()
             setBlogs(blogs)
         }
         getAllBlogs()
-    }, [])
+    }, []) */
 
     //Checks if the user data is already in local storage, so don't have to log in again
     useEffect(() => {
@@ -120,20 +125,13 @@ const App = () => {
     const blogFormRef = useRef()
 
     //Event handler for adding a blog
-    const addBlog = async (title, author, url) => {
+    const addBlog = async () => {
         try {
             blogFormRef.current.toggleVisibility()
-            const blog = await blogService.create({
-                title,
-                author,
-                url,
-            })
-            dispatch(setNotification({
-                text: 'New blog was added!',
-                style: 'success',
-            }))
+
+            //moved the addBlog to the blogForm component
             const user = await blogService.getUser()
-            setBlogs(blogs.concat({ ...blog, user }))
+            //setBlogs(blogs.concat({ ...blog, user }))
         } catch (error) {
             dispatch(setNotification({
                 text: 'Blog not added',
