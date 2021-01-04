@@ -1,8 +1,6 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-    console.log('state:', state)
-    console.log('action:', action)
     switch (action.type) {
         case 'NEW_BLOG':
             return [...state, action.data]
@@ -28,10 +26,8 @@ export const initBlogs = () => {
 
 //add blog
 export const addBlog = (blogData) => {
-    console.log('blogdata:', blogData)
     return async dispatch => {
         const newBlog = await blogService.create(blogData)
-        console.log('newBlog:', newBlog)
         dispatch({
             type: 'NEW_BLOG',
             data: newBlog

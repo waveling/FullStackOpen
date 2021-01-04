@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -9,40 +9,20 @@ const formStyle = {
     maxWidth: '300px',
 }
 
-const BlogForm = (props) => {
+const BlogForm = () => {
     const dispatch = useDispatch()
-
-    const [newTitle, setNewTitle] = useState('')
-    const [newAuthor, setNewAuthor] = useState('')
-    const [newUrl, setNewUrl] = useState('')
 
     const handleAddBlog = (event) => {
         event.preventDefault()
-        //createBlog(newTitle, newAuthor, newUrl)
         dispatch(addBlog({
-            title: newTitle,
-            author: newAuthor,
-            url: newUrl
+            title: event.target.title.value,
+            author: event.target.author.value,
+            url: event.target.url.value
         }))
         dispatch(setNotification({
             text: 'New blog was added!',
             style: 'success',
         }))
-        setNewUrl('')
-        setNewTitle('')
-        setNewAuthor('')
-    }
-
-    const handleTitleChange = (event) => {
-        setNewTitle(event.target.value)
-    }
-
-    const handleAuthorChange = (event) => {
-        setNewAuthor(event.target.value)
-    }
-
-    const handleUrlChange = (event) => {
-        setNewUrl(event.target.value)
     }
 
     return (
@@ -52,25 +32,22 @@ const BlogForm = (props) => {
                 <p>
                     Title:
                     <input
+                        name='title'
                         className="titleInput"
-                        value={newTitle}
-                        onChange={handleTitleChange}
                     ></input>
                 </p>
                 <p>
                     Author:
                     <input
+                        name='author'
                         className="authorInput"
-                        value={newAuthor}
-                        onChange={handleAuthorChange}
                     ></input>
                 </p>
                 <p>
                     Url:
                     <input
+                        name='url'
                         className="urlInput"
-                        value={newUrl}
-                        onChange={handleUrlChange}
                     ></input>
                 </p>
                 <button className="submit-blog-button" type="submit">
