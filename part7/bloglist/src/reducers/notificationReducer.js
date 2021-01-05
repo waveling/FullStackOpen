@@ -1,5 +1,5 @@
 
-const notificationReducer = (state = '', action) => {
+const notificationReducer = (state = [], action) => {
     switch (action.type) {
         case 'NOTIFICATION':
             return action

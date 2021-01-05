@@ -23,6 +23,9 @@ const BlogForm = () => {
             text: 'New blog was added!',
             style: 'success',
         }))
+        event.target.title.value = ''
+        event.target.author.value = ''
+        event.target.url.value = ''
     }
 
     return (

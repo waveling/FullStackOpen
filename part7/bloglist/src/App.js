@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,7 +11,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
+    //const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
@@ -19,18 +19,13 @@ const App = () => {
     //For dispatching actions from the redux-store
     const dispatch = useDispatch()
 
+
+
+
     //Fetches all the blogs from the database
     useEffect(() => {
         dispatch(initBlogs())
     }, [dispatch])
-
-    /* useEffect(() => {
-        const getAllBlogs = async () => {
-            const blogs = await blogService.getAll()
-            setBlogs(blogs)
-        }
-        getAllBlogs()
-    }, []) */
 
     //Checks if the user data is already in local storage, so don't have to log in again
     useEffect(() => {
@@ -69,9 +64,9 @@ const App = () => {
     }
 
     //Event handler for liking a blog
-    const handleLikes = async (blog) => {
+    /* const handleLikes = async (blog) => {
         try {
-            await blogService.update(blog.id, {
+             await blogService.update(blog.id, {
                 title: blog.title,
                 author: blog.author,
                 url: blog.url,
@@ -84,11 +79,11 @@ const App = () => {
                 style: 'success'
             }))
 
-            const updatedBlogList = blogs.map((item) =>
+             const updatedBlogList = blogs.map((item) =>
                 item.id === blog.id ? { ...item, likes: item.likes + 1 } : item
             )
 
-            setBlogs(updatedBlogList)
+            //setBlogs(updatedBlogList)
 
         } catch (error) {
             dispatch(setNotification({
@@ -96,10 +91,10 @@ const App = () => {
                 style: 'error'
             }))
         }
-    }
+    } */
 
     //Event handler for deleting a blog
-    const handleDelete = async (blog) => {
+    /* const handleDelete = async (blog) => {
         try {
             await blogService.deleteBlog(blog.id)
             dispatch(setNotification({
@@ -107,14 +102,14 @@ const App = () => {
                 style: 'success',
             }))
             const updatedBlogList = blogs.filter((item) => item.id !== blog.id)
-            setBlogs(updatedBlogList)
+            //setBlogs(updatedBlogList)
         } catch (error) {
             dispatch(setNotification({
                 text: 'Couldn\'t delete the blog!',
                 style: 'error',
             }))
         }
-    }
+    } */
 
     //Event handler for logging out and removing user data from clients local storage
     const handleLogout = () => {
@@ -129,9 +124,7 @@ const App = () => {
         try {
             blogFormRef.current.toggleVisibility()
 
-            //moved the addBlog to the blogForm component
-            const user = await blogService.getUser()
-            //setBlogs(blogs.concat({ ...blog, user }))
+            //const user = await blogService.getUser()
         } catch (error) {
             dispatch(setNotification({
                 text: 'Blog not added',
@@ -159,18 +152,7 @@ const App = () => {
                             <BlogForm createBlog={addBlog} />
                         </Togglable>
                         <h2>Blogs</h2>
-                        <div>
-                            {blogs
-                                .sort((a, b) => b.likes - a.likes)
-                                .map((blog) => (
-                                    <Blog
-                                        key={blog.id}
-                                        blog={blog}
-                                        handleLikes={handleLikes}
-                                        handleDelete={handleDelete}
-                                    />
-                                ))}
-                        </div>
+                        <Blog />
                     </div>
                 )}
         </div>
