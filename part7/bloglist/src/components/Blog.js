@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addLike } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import { showDetails } from '../reducers/detailReducer'
 
-const BlogList = () => {
-    const [details, setDetails] = useState(false)
-
+const Blog = () => {
     //dispatch action from redux store
     const dispatch = useDispatch()
 
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
-    console.log('blogs',blogs)
+    const details = useSelector(state => state.details)
+    console.log('detail',details)
 
     const handleDetails = () => {
-        setDetails(!details)
+        dispatch(showDetails())
     }
 
     const updateLikes = (id) => {
@@ -73,4 +73,4 @@ const BlogList = () => {
     )
 }
 
-export default BlogList
+export default Blog
