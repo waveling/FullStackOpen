@@ -12,6 +12,9 @@ const blogReducer = (state = [], action) => {
             )
         case 'INIT_BLOGS':
             return action.data
+        case 'DELETE_BLOG':
+            return state.filter((blog) =>
+                blog.id !== action.data.id)
         default:
             return state
     }
@@ -40,9 +43,11 @@ export const addBlog = (blogData) => {
 }
 
 //add like
-export const addLike = (id) => {
+export const addLike = (id, newObject) => {
     return async dispatch => {
-        const updatedBlog = await blogService.update(id)
+        const updatedBlog = await blogService.update(id, newObject)
+        console.log('newObject:', newObject)
+        console.log('updated:',updatedBlog)
         dispatch({
             type: 'ADD_LIKE',
             data: updatedBlog
@@ -51,7 +56,15 @@ export const addLike = (id) => {
 }
 
 //delete blogs
-
+export const deleteBlog = (id) => {
+    return async dispatch => {
+        const deletedBlog = await blogService.deleteBlog(id)
+        dispatch({
+            type: 'DELETE_BLOG',
+            data: deletedBlog
+        })
+    }
+}
 //something to do with the token?
 
 

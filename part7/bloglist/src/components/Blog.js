@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
-import { addLike } from '../reducers/blogReducer'
+import { addLike, deleteBlog } from '../reducers/blogReducer'
 
-const Item = ({ blog }) => {
+const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
     const [details, setDetails] = useState(false)
 
     const handleDetails = () => {
@@ -24,14 +24,14 @@ const Item = ({ blog }) => {
                     <p className="likes">Likes: {blog.likes}</p>
                     <p className="url">Url: {blog.url}</p>
                     <p>User: {blog.user.username}</p>
-                    <button onClick={() => updateLikes(blog.id)} className="like">
+                    <button onClick={() => updateLikes(blog.id, { ...blog, likes: blog.likes + 1 })} className="like">
                         like
                     </button>
-                    {/*authorizeRemove(blog.user.id) && (
-                        <button className="remove">
+                    {authorizeRemove(blog.user.id) && (
+                        <button className="remove" onClick={() => removeBlog(blog)}>
                             remove
                         </button>
-                    )*/}
+                    )}
                 </div>
             )}
         </ul>
@@ -44,19 +44,19 @@ const Blog = () => {
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
 
-    const updateLikes = (id) => {
-        dispatch(addLike(id))
+    const updateLikes = (id, newObject) => {
+        dispatch(addLike(id, newObject))
     }
 
-    /* const removeBlog = () => {
+    const removeBlog = (blog) => {
         if (
             window.confirm(
                 `Are you sure you want to delete the blog ${blog.title}?`
             )
         ) {
-            handleDelete(blog)
+            dispatch(deleteBlog(blog.id))
         }
-    } */
+    }
 
     const authorizeRemove = (identifiedUser) => {
         const user = blogService.getUser()
@@ -68,11 +68,14 @@ const Blog = () => {
     return (
         <div>
             {blogs
-                .sort((a, b) => a.likes - b.likes)
+                .sort((a, b) => b.likes - a.likes)
                 .map((blog) => (
                     <Item
                         key={blog.id}
                         blog={blog}
+                        updateLikes={updateLikes}
+                        authorizeRemove={authorizeRemove}
+                        removeBlog={removeBlog}
                     />
                 ))
             }
