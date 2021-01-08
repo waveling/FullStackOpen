@@ -1,8 +1,6 @@
 import blogService from '../services/blogs'
 
 const blogReducer = (state = [], action) => {
-    console.log('state:', state)
-    console.log('action:', action)
     switch (action.type) {
         case 'NEW_BLOG':
             return [...state, action.data]
@@ -46,8 +44,6 @@ export const addBlog = (blogData) => {
 export const addLike = (id, newObject) => {
     return async dispatch => {
         const updatedBlog = await blogService.update(id, newObject)
-        console.log('newObject:', newObject)
-        console.log('updated:',updatedBlog)
         dispatch({
             type: 'ADD_LIKE',
             data: updatedBlog
@@ -59,14 +55,12 @@ export const addLike = (id, newObject) => {
 export const deleteBlog = (id) => {
     return async dispatch => {
         const deletedBlog = await blogService.deleteBlog(id)
+        console.log('deleted:', deletedBlog)
         dispatch({
             type: 'DELETE_BLOG',
             data: deletedBlog
         })
     }
 }
-//something to do with the token?
-
-
 
 export default blogReducer

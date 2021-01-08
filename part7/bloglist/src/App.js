@@ -4,23 +4,20 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Blog from './components/Blog'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
+import { setReduxUser, setLogout } from './reducers/userReducer'
 
 const App = () => {
     //const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
 
     //For dispatching actions from the redux-store
     const dispatch = useDispatch()
 
-
-
+    const user = useSelector(state => state.user)
 
     //Fetches all the blogs from the database
     useEffect(() => {
@@ -28,31 +25,30 @@ const App = () => {
     }, [dispatch])
 
     //Checks if the user data is already in local storage, so don't have to log in again
-    useEffect(() => {
+    /* useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
             setUser(user)
             blogService.setToken(user.token)
         }
-    }, [])
+    }, []) */
 
     //Event handler for logging in
     const handleLogin = async (event) => {
         event.preventDefault()
         try {
-            const user = await loginService.login({
+            dispatch(setReduxUser({
                 username,
-                password,
-            })
+                password
+            }))
 
-            window.localStorage.setItem(
-                'loggedBlogAppUser',
-                JSON.stringify(user)
-            )
+            //set the user to local storage
+            /*  window.localStorage.setItem(
+                 'loggedBlogAppUser',
+                 JSON.stringify(user)
+             ) */
 
-            blogService.setToken(user.token)
-            setUser(user)
             setUsername('')
             setPassword('')
         } catch (exception) {
@@ -114,7 +110,7 @@ const App = () => {
     //Event handler for logging out and removing user data from clients local storage
     const handleLogout = () => {
         window.localStorage.removeItem('loggedBlogAppUser')
-        setUser(null)
+        dispatch(setLogout())
     }
 
     const blogFormRef = useRef()

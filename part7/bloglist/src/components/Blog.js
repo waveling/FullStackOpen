@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 
 const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
+    //Local state for showing/hiding the details for each Item-component
     const [details, setDetails] = useState(false)
 
     const handleDetails = () => {
@@ -41,6 +42,7 @@ const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
 const Blog = () => {
     //dispatch action from redux store
     const dispatch = useDispatch()
+
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
 
