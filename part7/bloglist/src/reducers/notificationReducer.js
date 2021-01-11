@@ -6,7 +6,7 @@ const notificationReducer = (state = [], action) => {
         case 'HIDE_NOTIFICATION':
             return ''
         default:
-            return ''
+            return state
     }
 }
 
