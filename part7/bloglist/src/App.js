@@ -25,14 +25,13 @@ const App = () => {
     }, [dispatch])
 
     //Checks if the user data is already in local storage, so don't have to log in again
-    /* useEffect(() => {
+    useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-            blogService.setToken(user.token)
+            console.log('userHere:', user)
         }
-    }, []) */
+    }, [])
 
     //Event handler for logging in
     const handleLogin = async (event) => {
@@ -42,12 +41,6 @@ const App = () => {
                 username,
                 password
             }))
-
-            //set the user to local storage
-            /*  window.localStorage.setItem(
-                 'loggedBlogAppUser',
-                 JSON.stringify(user)
-             ) */
 
             setUsername('')
             setPassword('')

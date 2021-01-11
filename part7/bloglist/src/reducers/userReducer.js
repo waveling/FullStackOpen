@@ -14,7 +14,7 @@ const userReducer = (state = null, action) => {
         case 'SET_TOKEN':
             return [...state, action.data]
         default:
-            return null
+            return state
     }
 }
 
@@ -26,6 +26,11 @@ export const setReduxUser = (credentials) => {
             type: 'SET_USER',
             data: user
         })
+        //set user information to localStorage-object
+        window.localStorage.setItem(
+            'loggedBlogAppUser',
+            JSON.stringify(user)
+        )
         blogService.setToken(user.token)
     }
 }
@@ -59,8 +64,6 @@ export const setReduxPassword = (password) => {
 export const setReduxToken = (newToken) => {
     return async dispatch => {
         const token = blogService.setToken(newToken)
-        console.log('newToken:', newToken)
-        console.log('token:', token)
         dispatch({
             type: 'SET_TOKEN',
             data: token

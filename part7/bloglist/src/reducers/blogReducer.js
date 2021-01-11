@@ -55,7 +55,6 @@ export const addLike = (id, newObject) => {
 export const deleteBlog = (id) => {
     return async dispatch => {
         const deletedBlog = await blogService.deleteBlog(id)
-        console.log('deleted:', deletedBlog)
         dispatch({
             type: 'DELETE_BLOG',
             data: deletedBlog
