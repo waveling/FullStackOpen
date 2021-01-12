@@ -13,6 +13,8 @@ const userReducer = (state = null, action) => {
             return [...state, action.data]
         case 'SET_TOKEN':
             return [...state, action.data]
+        case 'CHECK_LOCALSTORAGE':
+            return action.data
         default:
             return state
     }
@@ -70,4 +72,20 @@ export const setReduxToken = (newToken) => {
         })
     }
 }
+
+//check if user is already in localstorage, so no need to log in again
+export const checkLocalStorage = () => {
+    return async dispatch => {
+        const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
+            dispatch({
+                type: 'CHECK_LOCALSTORAGE',
+                data: user
+            })
+            blogService.setToken(user.token)
+        }
+    }
+}
+
 export default userReducer

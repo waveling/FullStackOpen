@@ -3,11 +3,18 @@ import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 
-const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
+const Item = ({ blog, authorizeRemove, removeBlog }) => {
     //Local state for showing/hiding the details for each Item-component
     const [details, setDetails] = useState(false)
+    const dispatch = useDispatch()
+
+    const updateLikes = (id, newObject) => {
+        console.log('newObject:', newObject)
+        dispatch(addLike(id, newObject))
+    }
 
     const handleDetails = () => {
+        console.log('blog:', blog)
         setDetails(!details)
     }
 
@@ -25,7 +32,7 @@ const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
                     <p className="likes">Likes: {blog.likes}</p>
                     <p className="url">Url: {blog.url}</p>
                     <p>User: {blog.user.username}</p>
-                    <button onClick={() => updateLikes(blog.id, { ...blog, likes: blog.likes + 1 })} className="like">
+                    <button onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} className="like">
                         like
                     </button>
                     {authorizeRemove(blog.user.id) && (
@@ -40,15 +47,10 @@ const Item = ({ blog, updateLikes, authorizeRemove, removeBlog }) => {
 }
 
 const Blog = () => {
-    //dispatch action from redux store
     const dispatch = useDispatch()
 
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
-
-    const updateLikes = (id, newObject) => {
-        dispatch(addLike(id, newObject))
-    }
 
     const removeBlog = (blog) => {
         if (
@@ -75,7 +77,6 @@ const Blog = () => {
                     <Item
                         key={blog.id}
                         blog={blog}
-                        updateLikes={updateLikes}
                         authorizeRemove={authorizeRemove}
                         removeBlog={removeBlog}
                     />

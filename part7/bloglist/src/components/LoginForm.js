@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
-import setReduxUser, { setReduxUsername, setReduxPassword } from '../reducers/userReducer'
 
 const LoginForm = ({
     handleLogin,

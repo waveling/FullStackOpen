@@ -7,7 +7,7 @@ import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
-import { setReduxUser, setLogout } from './reducers/userReducer'
+import { setReduxUser, setLogout, checkLocalStorage } from './reducers/userReducer'
 
 const App = () => {
     //const [blogs, setBlogs] = useState([])
@@ -26,12 +26,8 @@ const App = () => {
 
     //Checks if the user data is already in local storage, so don't have to log in again
     useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            console.log('userHere:', user)
-        }
-    }, [])
+        dispatch(checkLocalStorage())
+    }, [dispatch])
 
     //Event handler for logging in
     const handleLogin = async (event) => {
@@ -134,16 +130,16 @@ const App = () => {
                     setPassword={setPassword}
                 />
             ) : (
-                    <div>
-                        <p>{user.name} is logged in</p>
-                        <button onClick={handleLogout}>Logout</button>
-                        <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-                            <BlogForm createBlog={addBlog} />
-                        </Togglable>
-                        <h2>Blogs</h2>
-                        <Blog />
-                    </div>
-                )}
+                <div>
+                    <p>{user.name} is logged in</p>
+                    <button onClick={handleLogout}>Logout</button>
+                    <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
+                        <BlogForm createBlog={addBlog} />
+                    </Togglable>
+                    <h2>Blogs</h2>
+                    <Blog />
+                </div>
+            )}
         </div>
     )
 }
