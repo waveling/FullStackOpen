@@ -9,12 +9,10 @@ const Item = ({ blog, authorizeRemove, removeBlog }) => {
     const dispatch = useDispatch()
 
     const updateLikes = (id, newObject) => {
-        console.log('newObject:', newObject)
         dispatch(addLike(id, newObject))
     }
 
     const handleDetails = () => {
-        console.log('blog:', blog)
         setDetails(!details)
     }
 
