@@ -18,7 +18,6 @@ const blogReducer = (state = [], action) => {
     }
 }
 
-//initialize blogs
 export const initBlogs = () => {
     return async dispatch => {
         const blogs = await blogService.getAll()
@@ -29,7 +28,6 @@ export const initBlogs = () => {
     }
 }
 
-//add blog
 export const addBlog = (blogData) => {
     return async dispatch => {
         const newBlog = await blogService.create(blogData)
@@ -41,7 +39,6 @@ export const addBlog = (blogData) => {
     }
 }
 
-//add like
 export const addLike = (id, newObject) => {
     return async dispatch => {
         const updatedBlog = await blogService.update(id, newObject)
@@ -52,7 +49,6 @@ export const addLike = (id, newObject) => {
     }
 }
 
-//delete blogs
 export const deleteBlog = (id) => {
     return async dispatch => {
         await blogService.deleteBlog(id)

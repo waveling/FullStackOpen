@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const userReducer = (state = null, action) => {
     switch (action.type) {
@@ -10,7 +11,7 @@ const userReducer = (state = null, action) => {
         case 'SET_PASSWORD':
             return [...state, action.data]
         case 'SET_USERNAME':
-            return [...state, action.data]
+            return action.data
         case 'SET_TOKEN':
             return [...state, action.data]
         case 'CHECK_LOCALSTORAGE':
@@ -21,49 +22,40 @@ const userReducer = (state = null, action) => {
 }
 
 //Action creator to store the user information to the state
-export const setReduxUser = (credentials) => {
+export const setUser = (credentials) => {
     return async dispatch => {
-        const user = await loginService.login(credentials)
-        dispatch({
-            type: 'SET_USER',
-            data: user
-        })
-        //set user information to localStorage-object
-        window.localStorage.setItem(
-            'loggedBlogAppUser',
-            JSON.stringify(user)
-        )
-        blogService.setToken(user.token)
+        try {
+            const user = await loginService.login(credentials)
+            dispatch({
+                type: 'SET_USER',
+                data: user
+            })
+            //set user information to localStorage-object
+            window.localStorage.setItem(
+                'loggedBlogAppUser',
+                JSON.stringify(user)
+            )
+            blogService.setToken(user.token)
+        } catch (e) {
+            dispatch(setNotification({
+                text: 'Wrong credentials',
+                style: 'error',
+            }))
+        }
     }
 }
 
+
 export const setLogout = () => {
     return async dispatch => {
+        window.localStorage.removeItem('loggedBlogAppUser')
         dispatch({
             type: 'LOGOUT'
         })
     }
 }
 
-export const setReduxUsername = (username) => {
-    return async dispatch => {
-        dispatch({
-            type: 'SET_USERNAME',
-            data: username
-        })
-    }
-}
-
-export const setReduxPassword = (password) => {
-    return async dispatch => {
-        dispatch({
-            type: 'SET_PASSWORD',
-            data: password
-        })
-    }
-}
-
-export const setReduxToken = (newToken) => {
+export const setToken = (newToken) => {
     return async dispatch => {
         const token = blogService.setToken(newToken)
         dispatch({

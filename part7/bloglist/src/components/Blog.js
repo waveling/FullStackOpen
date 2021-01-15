@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Item = ({ blog, authorizeRemove, removeBlog }) => {
     //Local state for showing/hiding the details for each Item-component
@@ -10,6 +11,10 @@ const Item = ({ blog, authorizeRemove, removeBlog }) => {
 
     const updateLikes = (id, newObject) => {
         dispatch(addLike(id, newObject))
+        dispatch(setNotification({
+            text: 'Great success',
+            style: 'success'
+        }))
     }
 
     const handleDetails = () => {
