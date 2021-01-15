@@ -8,10 +8,6 @@ const userReducer = (state = null, action) => {
             return action.data
         case 'LOGOUT':
             return null
-        case 'SET_PASSWORD':
-            return [...state, action.data]
-        case 'SET_USERNAME':
-            return action.data
         case 'SET_TOKEN':
             return [...state, action.data]
         case 'CHECK_LOCALSTORAGE':

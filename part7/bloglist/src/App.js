@@ -1,9 +1,14 @@
 import React, { useEffect, useRef } from 'react'
+import {
+    BrowserRouter as Router,
+    Switch, Route, Link
+} from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Blog from './components/Blog'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
@@ -51,13 +56,24 @@ const App = () => {
                 <LoginForm />
             ) : (
                 <div>
-                    <p>{user.name} is logged in</p>
-                    <button onClick={handleLogout}>Logout</button>
-                    <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-                        <BlogForm createBlog={addBlog} />
-                    </Togglable>
-                    <h2>Blogs</h2>
-                    <Blog />
+                    <Router>
+                        <Link to='/home'>Home</Link>
+                        <Link to='/users'>Users</Link>
+                        <p>{user.name} is logged in</p>
+                        <button onClick={handleLogout}>Logout</button>
+                        <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
+                            <BlogForm createBlog={addBlog} />
+                        </Togglable>
+                        <Switch>
+                            <Route path='/users'>
+                                <Users />
+                            </Route>
+                            <Route path='/home'>
+                                <h2>Blogs</h2>
+                                <Blog />
+                            </Route>
+                        </Switch>
+                    </Router>
                 </div>
             )}
         </div>
