@@ -64,3 +64,17 @@ button {
   width: fit-content;
   position: fixed;
 }
+
+.blogCountStyle {
+  text-align: right;
+}
+
+.userBlogCount {
+  float: right;
+  right: 0px;
+}
+
+.userViewContainer {
+  display: grid;
+  width: 200px;
+}

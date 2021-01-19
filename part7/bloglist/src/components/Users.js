@@ -15,11 +15,20 @@ const Users = () => {
     return (
         <div>
             <h2>Users</h2>
-            {
-                users.map((user) => {
-                    return <h4 key={user.id}>{user.username}<p>{user.blogs.length}</p></h4>
-                })
-            }
+            <div className='userViewContainer'>
+                <div className='blogCountStyle'>
+                    Blog count
+                </div>
+                <div>
+                    {
+                        users.map((user) => {
+                            return (
+                                <h4 key={user.id}>{user.username}<span className='userBlogCount'>{user.blogs.length}</span></h4>
+                            )
+                        })
+                    }
+                </div>
+            </div>
         </div>
     )
 }
