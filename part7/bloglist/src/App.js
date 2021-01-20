@@ -9,6 +9,7 @@ import Notification from './components/Notification'
 import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
@@ -65,6 +66,9 @@ const App = () => {
                             <BlogForm createBlog={addBlog} />
                         </Togglable>
                         <Switch>
+                            <Route path='/users/:id'>
+                                <User />
+                            </Route>
                             <Route path='/users'>
                                 <Users />
                             </Route>
