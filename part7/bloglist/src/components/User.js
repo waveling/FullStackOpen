@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import usersService from '../services/users'
+import { useParams } from 'react-router-dom'
 
 const User = () => {
 
     const [ users, setUsers ] = useState([])
+
+    const id = useParams().id
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -16,12 +19,12 @@ const User = () => {
     return (
         <div>
             {
-                users.map((user) => {
-                    if (user.blogs[0]) {
-                        return (
-                            <div key={user.id}>{user.blogs[0].author}</div>
-                        )
-                    }
+                users.filter((user) => {
+                    return user.id === id
+                }).map((filteredUser) => {
+                    return filteredUser.blogs.map((blog) => {
+                        return <li key={blog.id}>{blog.title}</li>
+                    })
                 })
             }
         </div>
