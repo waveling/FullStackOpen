@@ -17,7 +17,6 @@ const userReducer = (state = null, action) => {
     }
 }
 
-//Action creator to store the user information to the state
 export const setUser = (credentials) => {
     return async dispatch => {
         try {
