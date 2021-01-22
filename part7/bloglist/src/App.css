@@ -38,7 +38,7 @@ button {
   border-width: 1px;
   margin: 10px;
   width: fit-content;
-  padding-right: 20px;
+  padding: 20px;
 }
 
 .success {

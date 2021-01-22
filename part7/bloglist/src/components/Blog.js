@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
@@ -6,30 +7,22 @@ import { setNotification } from '../reducers/notificationReducer'
 
 const Item = ({ blog, authorizeRemove, removeBlog }) => {
     //Local state for showing/hiding the details for each Item-component
-    const [details, setDetails] = useState(false)
+    const [details, /* setDetails */] = useState(false)
     const dispatch = useDispatch()
 
     const updateLikes = (id, newObject) => {
         dispatch(addLike(id, newObject))
         dispatch(setNotification({
-            text: 'Great success',
+            text: `Great success ${newObject}`,
             style: 'success'
         }))
     }
 
-    const handleDetails = () => {
-        setDetails(!details)
-    }
-
     return (
         <ul key={blog.id} className='blogItem'>
-            <p className="title">
-                {blog.title}
-                <button className="detailButton" onClick={handleDetails}>
-                    {details ? 'hide' : 'show'}
-                </button>
-            </p>
-            <p className="author">{blog.author}</p>
+            <Link to={`/blogs/${blog.id}`} className="title">
+                {blog.title} by {blog.author}
+            </Link>
             {details && (
                 <div className="detailedInfo">
                     <p className="likes">Likes: {blog.likes}</p>

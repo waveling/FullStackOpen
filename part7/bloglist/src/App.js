@@ -58,7 +58,7 @@ const App = () => {
             ) : (
                 <div>
                     <Router>
-                        <Link to='/home'>Home</Link>
+                        <Link to='/blogs'>Blogs</Link>
                         <Link to='/users'>Users</Link>
                         <p>{user.name} is logged in</p>
                         <button onClick={handleLogout}>Logout</button>
@@ -69,10 +69,13 @@ const App = () => {
                             <Route path='/users/:id'>
                                 <User />
                             </Route>
+                            <Route path='/blogs/:id'>
+                                <Blog />
+                            </Route>
                             <Route path='/users'>
                                 <Users />
                             </Route>
-                            <Route path='/home'>
+                            <Route path='/blogs'>
                                 <h2>Blogs</h2>
                                 <Blog />
                             </Route>
