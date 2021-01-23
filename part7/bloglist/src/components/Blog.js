@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import blogService from '../services/blogs'
+import React, { } from 'react'
+import { Link, useParams } from 'react-router-dom'
+//import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
-import { addLike, deleteBlog } from '../reducers/blogReducer'
+//import { addLike, deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const Item = ({ blog, authorizeRemove, removeBlog }) => {
+export const Item = ({ blog, authorizeRemove, removeBlog }) => {
     //Local state for showing/hiding the details for each Item-component
-    const [details, /* setDetails */] = useState(false)
+    //const [details, setDetails ] = useState(false)
     const dispatch = useDispatch()
 
     const updateLikes = (id, newObject) => {
-        dispatch(addLike(id, newObject))
+        //dispatch(addLike(id, newObject))
         dispatch(setNotification({
             text: `Great success ${newObject}`,
             style: 'success'
         }))
     }
 
+    const id = useParams().id
+
     return (
-        <ul key={blog.id} className='blogItem'>
-            <Link to={`/blogs/${blog.id}`} className="title">
-                {blog.title} by {blog.author}
-            </Link>
-            {details && (
+        <ul className='blogItem'>
+            {blog.title} by {blog.author}
+            {id && (
                 <div className="detailedInfo">
                     <p className="likes">Likes: {blog.likes}</p>
                     <p className="url">Url: {blog.url}</p>
@@ -43,12 +43,12 @@ const Item = ({ blog, authorizeRemove, removeBlog }) => {
 }
 
 const Blog = () => {
-    const dispatch = useDispatch()
+    //const dispatch = useDispatch()
 
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
 
-    const removeBlog = (blog) => {
+    /* const removeBlog = (blog) => {
         if (
             window.confirm(
                 `Are you sure you want to delete the blog ${blog.title}?`
@@ -63,19 +63,16 @@ const Blog = () => {
         if (user.id === identifiedUser) {
             return true
         }
-    }
+    } */
 
     return (
         <div>
             {blogs
                 .sort((a, b) => b.likes - a.likes)
                 .map((blog) => (
-                    <Item
-                        key={blog.id}
-                        blog={blog}
-                        authorizeRemove={authorizeRemove}
-                        removeBlog={removeBlog}
-                    />
+                    <ul key={blog.id}>
+                        <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+                    </ul>
                 ))
             }
         </div>
