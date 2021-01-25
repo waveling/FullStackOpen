@@ -6,7 +6,8 @@ import {
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Blog, { Item } from './components/Blog'
+import Blog from './components/Blog'
+import SingleBlog from './components/SingleBlog'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
@@ -70,7 +71,7 @@ const App = () => {
                                 <User />
                             </Route>
                             <Route path='/blogs/:id'>
-                                <Item />
+                                <SingleBlog />
                             </Route>
                             <Route path='/users'>
                                 <Users />

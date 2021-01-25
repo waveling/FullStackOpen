@@ -12,9 +12,6 @@ const notificationReducer = (state = [], action) => {
 
 //action creator for setting the notification
 export const setNotification = (message) => {
-    if (message === null) {
-        return ''
-    }
     return async dispatch => {
         dispatch({
             type: 'NOTIFICATION',

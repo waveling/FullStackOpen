@@ -1,4 +1,5 @@
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const blogReducer = (state = [], action) => {
     switch (action.type) {
@@ -46,6 +47,10 @@ export const addLike = (id, newObject) => {
             type: 'ADD_LIKE',
             data: updatedBlog
         })
+        dispatch(setNotification({
+            text: `You liked the blog ${newObject.title}`,
+            style: 'success'
+        }))
     }
 }
 
