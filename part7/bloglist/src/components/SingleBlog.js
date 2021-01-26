@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import Comments from './Comments'
 
 const SingleBlog = () => {
 
@@ -51,6 +52,10 @@ const SingleBlog = () => {
                                         remove
                                     </button>
                                 )}
+                                <Comments
+                                    id={blog.id}
+                                    comments={blog.comments}
+                                />
                             </div>
                         )
                     }

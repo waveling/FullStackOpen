@@ -72,8 +72,9 @@ button {
 .navStyle {
   display: flex;
   align-items: center;
+  justify-items: flex-start;
   justify-content: space-around;
-  max-width: 500px;
+  width: auto;
   position: sticky;
   background-color: cornflowerblue;
 }
