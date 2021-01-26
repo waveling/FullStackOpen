@@ -6,7 +6,7 @@ import {
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import SingleBlog from './components/SingleBlog'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
@@ -59,10 +59,12 @@ const App = () => {
             ) : (
                 <div>
                     <Router>
-                        <Link to='/blogs'>Blogs</Link>
-                        <Link to='/users'>Users</Link>
-                        <p>{user.name} is logged in</p>
-                        <button onClick={handleLogout}>Logout</button>
+                        <nav className='navStyle'>
+                            <Link to='/blogs'>Blogs</Link>
+                            <Link to='/users'>Users</Link>
+                            <h4>{user.name} is logged in</h4>
+                            <button onClick={handleLogout}>Logout</button>
+                        </nav>
                         <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
                             <BlogForm createBlog={addBlog} />
                         </Togglable>
@@ -78,7 +80,7 @@ const App = () => {
                             </Route>
                             <Route path='/blogs'>
                                 <h2>Blogs</h2>
-                                <Blog />
+                                <BlogList />
                             </Route>
                         </Switch>
                     </Router>

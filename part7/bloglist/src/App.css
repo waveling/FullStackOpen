@@ -12,16 +12,6 @@ button {
   outline: none;
 }
 
-.detailButton {
-  width: fit-content;
-  height: fit-content;
-  margin-left: 10px;
-  border-radius: 5px;
-  border: none;
-  background-color: lightblue;
-  font-family: "Courier New", Courier, monospace;
-}
-
 .like {
   background-color: lightskyblue;
 }
@@ -77,4 +67,13 @@ button {
 .userViewContainer {
   display: grid;
   width: 200px;
+}
+
+.navStyle {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 500px;
+  position: sticky;
+  background-color: cornflowerblue;
 }
