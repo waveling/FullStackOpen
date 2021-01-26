@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addLike } from '../reducers/blogReducer'
+import { addLike, deleteBlog } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
 const SingleBlog = () => {
 
@@ -12,6 +13,23 @@ const SingleBlog = () => {
 
     const updateLikes = (id, newObject) => {
         dispatch(addLike(id, newObject))
+    }
+
+    const removeBlog = (blog) => {
+        if (
+            window.confirm(
+                `Are you sure you want to delete the blog ${blog.title}?`
+            )
+        ) {
+            dispatch(deleteBlog(blog.id))
+        }
+    }
+
+    const authorizeRemove = (identifiedUser) => {
+        const user = blogService.getUser()
+        if (user.id === identifiedUser) {
+            return true
+        }
     }
 
     return (
@@ -28,11 +46,11 @@ const SingleBlog = () => {
                                 <button onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} className="like">
                                     like
                                 </button>
-                                {/* {authorizeRemove(blog.user.id) && (
+                                {authorizeRemove(blog.user.id) && (
                                     <button className="remove" onClick={() => removeBlog(blog)}>
                                         remove
                                     </button>
-                                )} */}
+                                )}
                             </div>
                         )
                     }
