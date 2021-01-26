@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const Blog = () => {
+const BlogList = () => {
     //get blogs from store
     const blogs = useSelector(state => state.blogs)
 
@@ -20,4 +20,4 @@ const Blog = () => {
     )
 }
 
-export default Blog
+export default BlogList
