@@ -32,7 +32,7 @@ const update = async (id, newObject) => {
 }
 
 const addComment = async (id, newObject) => {
-    const response = await axios.put(`${baseUrl}/${id}/comments`, newObject)
+    const response = await axios.post(`${baseUrl}/${id}/comments`, newObject)
     return response.data
 }
 

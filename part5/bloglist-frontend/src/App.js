@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -169,11 +170,12 @@ const App = () => {
                         <BlogForm createBlog={addBlog} />
                     </Togglable>
                     <h2>Blogs</h2>
+                    <Users />
                     <div>
                         {blogs
                             .sort((a, b) => b.likes - a.likes)
                             .map((blog) => (
-                                <Blog
+                                <BlogList
                                     key={blog.id}
                                     blog={blog}
                                     handleLikes={handleLikes}

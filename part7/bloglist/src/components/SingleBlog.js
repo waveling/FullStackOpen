@@ -53,8 +53,7 @@ const SingleBlog = () => {
                                     </button>
                                 )}
                                 <Comments
-                                    id={blog.id}
-                                    comments={blog.comments}
+                                    blog={blog}
                                 />
                             </div>
                         )

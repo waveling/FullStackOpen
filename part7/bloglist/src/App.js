@@ -25,10 +25,6 @@ const App = () => {
     //Fetches all the blogs from the database
     useEffect(() => {
         dispatch(initBlogs())
-    }, [dispatch])
-
-    //Checks if the user data is already in local storage, so don't have to log in again
-    useEffect(() => {
         dispatch(checkLocalStorage())
     }, [dispatch])
 
