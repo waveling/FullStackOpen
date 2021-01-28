@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import {
     BrowserRouter as Router,
-    Switch, Route, Link
+    Switch, Route
 } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -11,10 +11,42 @@ import SingleBlog from './components/SingleBlog'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
+import Navbar from './components/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { setLogout, checkLocalStorage } from './reducers/userReducer'
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+
+    html {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Montserrat", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: var(--bg);
+        color: var(--text);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+    }
+
+    a {
+        text-decoration: none;
+    }
+`
 
 const App = () => {
     //For dispatching actions from the redux-store
@@ -48,19 +80,18 @@ const App = () => {
     }
 
     return (
-        <div>
-            <Notification />
-            {user === null ? (
-                <LoginForm />
-            ) : (
-                <div>
-                    <Router>
-                        <nav className='navStyle'>
-                            <Link to='/blogs'>Blogs</Link>
-                            <Link to='/users'>Users</Link>
-                            <h4>{user.name} is logged in</h4>
-                            <button onClick={handleLogout}>Logout</button>
-                        </nav>
+        <Router>
+            <div>
+                <GlobalStyle />
+                <Notification />
+                {user === null ? (
+                    <LoginForm />
+                ) : (
+                    <div>
+                        <Navbar
+                            handleLogout={handleLogout}
+                            user={user}
+                        />
                         <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
                             <BlogForm createBlog={addBlog} />
                         </Togglable>
@@ -79,10 +110,10 @@ const App = () => {
                                 <BlogList />
                             </Route>
                         </Switch>
-                    </Router>
-                </div>
-            )}
-        </div>
+                    </div>
+                )}
+            </div>
+        </Router>
     )
 }
 

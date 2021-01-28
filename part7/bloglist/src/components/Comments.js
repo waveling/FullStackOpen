@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { addComment } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { Button } from './Styled'
 
 const Comments = ({ blog }) => {
 
@@ -16,7 +17,7 @@ const Comments = ({ blog }) => {
         <div>
             <h2>Comments</h2>
             <input placeholder='Add comment' onChange={({ target }) => setInputValue(target.value)}></input>
-            <button onClick={() => handleAddComment(blog.id, { ...blog, comments: blog.comments.concat(inputValue) }) }>Add Comment</button>
+            <Button onClick={() => handleAddComment(blog.id, { ...blog, comments: blog.comments.concat(inputValue) }) }>Add Comment</Button>
             <ul>
                 {
                     blog.comments.map((comment) => {

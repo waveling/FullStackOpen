@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 import Comments from './Comments'
+import { LikeButton, RemoveButton } from './Styled'
 
 const SingleBlog = () => {
 
@@ -44,13 +45,13 @@ const SingleBlog = () => {
                                 <p className="likes">Likes: {blog.likes}</p>
                                 <p className="url">Url: {blog.url}</p>
                                 <p>User: {blog.user.username}</p>
-                                <button onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} className="like">
+                                <LikeButton onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} >
                                     like
-                                </button>
+                                </LikeButton>
                                 {authorizeRemove(blog.user.id) && (
-                                    <button className="remove" onClick={() => removeBlog(blog)}>
+                                    <RemoveButton onClick={() => removeBlog(blog)}>
                                         remove
-                                    </button>
+                                    </RemoveButton>
                                 )}
                                 <Comments
                                     blog={blog}

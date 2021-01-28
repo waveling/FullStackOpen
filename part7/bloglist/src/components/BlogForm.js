@@ -2,12 +2,29 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Button } from './Styled'
+import styled from 'styled-components'
 
-const formStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: '300px',
-}
+const FormWrapper = styled.section`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+`
+
+const StyledForm = styled.form`
+    display: flex;
+    flex-direction: column;
+`
+
+const StyledInput = styled.input`
+    padding: 12px 20px;
+    width: 100%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+`
 
 const BlogForm = () => {
     const dispatch = useDispatch()
@@ -30,33 +47,29 @@ const BlogForm = () => {
 
     return (
         <div>
-            <h2>Add new blog</h2>
-            <form className="form" onSubmit={handleAddBlog} style={formStyle}>
-                <p>
-                    Title:
-                    <input
+            <FormWrapper>
+                <h2>Add new blog</h2>
+                <StyledForm className="form" onSubmit={handleAddBlog} >
+                    <label>Title</label>
+                    <StyledInput
                         name='title'
                         className="titleInput"
-                    ></input>
-                </p>
-                <p>
-                    Author:
-                    <input
+                    />
+                    <label>Author</label>
+                    <StyledInput
                         name='author'
                         className="authorInput"
-                    ></input>
-                </p>
-                <p>
-                    Url:
-                    <input
+                    />
+                    <label>Url</label>
+                    <StyledInput
                         name='url'
                         className="urlInput"
-                    ></input>
-                </p>
-                <button className="submit-blog-button" type="submit">
-                    Add Blog
-                </button>
-            </form>
+                    />
+                    <Button className="submit-blog-button" type="submit">
+                        Add Blog
+                    </Button>
+                </StyledForm>
+            </FormWrapper>
         </div>
     )
 }
