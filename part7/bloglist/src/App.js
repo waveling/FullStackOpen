@@ -106,7 +106,6 @@ const App = () => {
                                 <Users />
                             </Route>
                             <Route path='/blogs'>
-                                <h2>Blogs</h2>
                                 <BlogList />
                             </Route>
                         </Switch>

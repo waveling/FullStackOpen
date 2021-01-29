@@ -2,13 +2,13 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { addBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { Button } from './Styled'
 import styled from 'styled-components'
 
 const FormWrapper = styled.section`
     display: flex;
     justify-content: center;
     flex-direction: column;
+    min-width: 500px;
 `
 
 const StyledForm = styled.form`
@@ -25,6 +25,12 @@ const StyledInput = styled.input`
     border-radius: 4px;
     box-sizing: border-box;
 `
+
+const StyledSubmitInput = styled(StyledInput)`
+    width: 100%;
+    background-color: #4CAF50;
+`
+
 
 const BlogForm = () => {
     const dispatch = useDispatch()
@@ -46,31 +52,27 @@ const BlogForm = () => {
     }
 
     return (
-        <div>
-            <FormWrapper>
-                <h2>Add new blog</h2>
-                <StyledForm className="form" onSubmit={handleAddBlog} >
-                    <label>Title</label>
-                    <StyledInput
-                        name='title'
-                        className="titleInput"
-                    />
-                    <label>Author</label>
-                    <StyledInput
-                        name='author'
-                        className="authorInput"
-                    />
-                    <label>Url</label>
-                    <StyledInput
-                        name='url'
-                        className="urlInput"
-                    />
-                    <Button className="submit-blog-button" type="submit">
-                        Add Blog
-                    </Button>
-                </StyledForm>
-            </FormWrapper>
-        </div>
+        <FormWrapper>
+            <h2>Add new blog</h2>
+            <StyledForm className="form" onSubmit={handleAddBlog} >
+                <label>Title</label>
+                <StyledInput
+                    name='title'
+                    className="titleInput"
+                />
+                <label>Author</label>
+                <StyledInput
+                    name='author'
+                    className="authorInput"
+                />
+                <label>Url</label>
+                <StyledInput
+                    name='url'
+                    className="urlInput"
+                />
+                <StyledSubmitInput value='Add Blog' type="submit" />
+            </StyledForm>
+        </FormWrapper>
     )
 }
 

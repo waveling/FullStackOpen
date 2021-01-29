@@ -1,12 +1,22 @@
 import React, { useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from './Styled'
 import styled from 'styled-components'
 
 const TogglableWrapper = styled.div`
     display: flex;
     padding-top: 80px;
     justify-content: center;
+    width: 100%;
+`
+
+const StyledButton = styled.button`
+    padding: 12px 20px;
+    width: 100%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 `
 
 const Togglable = React.forwardRef((props, ref) => {
@@ -32,17 +42,15 @@ const Togglable = React.forwardRef((props, ref) => {
     Togglable.displayName = 'Togglable'
 
     return (
-        <div>
-            <TogglableWrapper>
-                <div style={hideWhenVisible}>
-                    <Button onClick={toggleVisibility}>{props.buttonLabel}</Button>
-                </div>
-                <div style={showWhenVisible}>
-                    {props.children}
-                    <Button onClick={toggleVisibility}>Cancel</Button>
-                </div>
-            </TogglableWrapper>
-        </div>
+        <TogglableWrapper>
+            <div style={hideWhenVisible}>
+                <StyledButton onClick={toggleVisibility}>{props.buttonLabel}</StyledButton>
+            </div>
+            <div style={showWhenVisible}>
+                {props.children}
+                <StyledButton onClick={toggleVisibility}>Cancel</StyledButton>
+            </div>
+        </TogglableWrapper>
     )
 })
 

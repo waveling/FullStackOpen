@@ -4,7 +4,28 @@ import { useParams } from 'react-router-dom'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 import Comments from './Comments'
-import { LikeButton, RemoveButton } from './Styled'
+import styled from 'styled-components'
+
+const BlogWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`
+
+const Button = styled.button`
+    padding: 12px 20px;
+    width: 100%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: lightskyblue;
+`
+
+const RemoveButton = styled(Button)`
+    background-color: lightpink;
+`
 
 const SingleBlog = () => {
 
@@ -35,7 +56,7 @@ const SingleBlog = () => {
     }
 
     return (
-        <div>
+        <BlogWrapper>
             {
                 blogs.map((blog) => {
                     if (blog.id === id) {
@@ -45,9 +66,9 @@ const SingleBlog = () => {
                                 <p className="likes">Likes: {blog.likes}</p>
                                 <p className="url">Url: {blog.url}</p>
                                 <p>User: {blog.user.username}</p>
-                                <LikeButton onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} >
+                                <Button onClick={() => updateLikes(blog.id,{ ...blog, likes: blog.likes + 1 })} >
                                     like
-                                </LikeButton>
+                                </Button>
                                 {authorizeRemove(blog.user.id) && (
                                     <RemoveButton onClick={() => removeBlog(blog)}>
                                         remove
@@ -61,7 +82,7 @@ const SingleBlog = () => {
                     }
                 })
             }
-        </div>
+        </BlogWrapper>
     )
 }
 
