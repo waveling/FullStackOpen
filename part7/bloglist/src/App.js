@@ -17,8 +17,10 @@ import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { setLogout, checkLocalStorage } from './reducers/userReducer'
 import { createGlobalStyle } from 'styled-components'
+import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
+    ${reset};
 
     html {
         box-sizing: border-box;
