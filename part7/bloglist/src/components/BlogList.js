@@ -17,10 +17,15 @@ const StyledList = styled.li`
     max-width: 500px;
     padding: 1rem 1rem 1rem 3rem;
     position: relative;
-    border-radius: 0 0.5rem 0.5rem 0.5rem;
+    border-radius: 0.5rem;
     margin-top: 1rem;
     min-height: 3rem;
+    background-color: lightgrey;
     box-shadow: 0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05)
+`
+
+const StyledLink = styled(Link)`
+    color: #232323;
 `
 
 const BlogList = () => {
@@ -29,12 +34,12 @@ const BlogList = () => {
 
     return (
         <ListWrapper>
-            <h2>Blogs</h2>
+            <h1>Blogs</h1>
             {blogs
                 .sort((a, b) => b.likes - a.likes)
                 .map((blog) => (
                     <StyledList key={blog.id}>
-                        <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+                        <StyledLink to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</StyledLink>
                     </StyledList>
                 ))
             }

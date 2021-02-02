@@ -12,6 +12,7 @@ import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import Navbar from './components/Navbar'
+import { MenuProvider } from './components/Menu'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
@@ -90,13 +91,12 @@ const App = () => {
                     <LoginForm />
                 ) : (
                     <div>
-                        <Navbar
-                            handleLogout={handleLogout}
-                            user={user}
-                        />
-                        <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-                            <BlogForm createBlog={addBlog} />
-                        </Togglable>
+                        <MenuProvider>
+                            <Navbar
+                                handleLogout={handleLogout}
+                                user={user}
+                            />
+                        </MenuProvider>
                         <Switch>
                             <Route path='/users/:id'>
                                 <User />
@@ -108,6 +108,9 @@ const App = () => {
                                 <Users />
                             </Route>
                             <Route path='/blogs'>
+                                <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
+                                    <BlogForm createBlog={addBlog} />
+                                </Togglable>
                                 <BlogList />
                             </Route>
                         </Switch>

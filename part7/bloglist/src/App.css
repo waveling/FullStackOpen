@@ -1,0 +1,6 @@
+:root {
+    --text: #fff;
+    --bg: #232323;
+    --headerBg: #1c1c1c;
+    --headerBoxShadow: rgba(0, 0, 0, 0.8) 0 1px 4px;
+}

@@ -8,19 +8,25 @@ const UsersWrapper = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
+    padding-top: 10rem;
 `
 
 const UsersListItem = styled.li`
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
     max-width: 500px;
-    padding: 1rem 1rem 1rem 3rem;
+    padding: 1rem;
     position: relative;
-    border-radius: 0 0.5rem 0.5rem 0.5rem;
+    border-radius: 0.5rem;
     margin-top: 1rem;
     min-height: 3rem;
-    box-shadow: 0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05)
+    box-shadow: 0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05);
+    background-color: lightgrey;
+`
+
+const StyledLink = styled(Link)`
+    color: #232323;
 `
 
 const Users = () => {
@@ -43,7 +49,7 @@ const Users = () => {
                         users.map((user) => {
                             return (
                                 <UsersListItem key={user.id}>
-                                    <Link to={`/users/${user.id}`}>{user.username}<span className='userBlogCount'>{user.blogs.length}</span></Link>
+                                    <StyledLink to={`/users/${user.id}`}>{user.username}<span className='userBlogCount'>{user.blogs.length}</span></StyledLink>
                                 </UsersListItem>
                             )
                         })

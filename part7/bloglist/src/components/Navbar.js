@@ -1,11 +1,16 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { useMenuContext } from './Menu'
+import { Squash as Hamburger } from 'hamburger-react'
 import NavLinks from './NavLinks'
 
 const Navbar = () => {
+    const { isMenuOpen, toggleMenu } = useMenuContext()
+
     return (
         <StyledNavigation>
             <NavLinks />
+            <Hamburger toggled={isMenuOpen} toggle={toggleMenu} duration={0} />
         </StyledNavigation>
     )
 }
@@ -18,6 +23,8 @@ const StyledNavigation = styled.nav`
     justify-content: space-around;
     align-items: center;
 
+    background: var(--bg);
+    color: var(--text);
     transition: all 150ms linear;
 
     border-bottom: 2px solid #f1f1f1;
@@ -42,4 +49,18 @@ const StyledNavigation = styled.nav`
         padding: 0 30px;
     }
 
+    .nav-links {
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
+    }
+
+    .hamburger-react {
+        display: none;
+        z-index: 99;
+        
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
+    }
 `

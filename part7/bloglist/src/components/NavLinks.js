@@ -1,15 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { useMenuContext } from '../components/Menu'
 
 export const links = ['home', 'blogs', 'users']
 
 const NavbarLinks = () => {
+    const { closeMenu } = useMenuContext()
+
     return (
-        <NavLinksWrapper>
+        <NavLinksWrapper className='nav-links'>
             {links.map((link) => (
                 <li key={link}>
-                    <NavLink to={`/${link}`} className='link'>
+                    <NavLink to={`/${link}`} className='link' onClick={closeMenu}>
                         {link}
                     </NavLink>
                 </li>
