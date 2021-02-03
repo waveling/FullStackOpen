@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { setLogout, checkLocalStorage } from './reducers/userReducer'
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
@@ -49,6 +49,12 @@ const GlobalStyle = createGlobalStyle`
     a {
         text-decoration: none;
     }
+`
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const App = () => {
@@ -90,7 +96,7 @@ const App = () => {
                 {user === null ? (
                     <LoginForm />
                 ) : (
-                    <div>
+                    <Wrapper>
                         <MenuProvider>
                             <Navbar
                                 handleLogout={handleLogout}
@@ -114,7 +120,7 @@ const App = () => {
                                 <BlogList />
                             </Route>
                         </Switch>
-                    </div>
+                    </Wrapper>
                 )}
             </div>
         </Router>
