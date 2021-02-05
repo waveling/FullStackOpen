@@ -4,12 +4,12 @@ import { useMenuContext } from './Menu'
 import { Squash as Hamburger } from 'hamburger-react'
 import NavLinks from './NavLinks'
 
-const Navbar = () => {
+const Navbar = ({ handleLogout }) => {
     const { isMenuOpen, toggleMenu } = useMenuContext()
 
     return (
         <StyledNavigation>
-            <NavLinks />
+            <NavLinks handleLogout={handleLogout}/>
             <Hamburger toggled={isMenuOpen} toggle={toggleMenu} duration={0} />
         </StyledNavigation>
     )

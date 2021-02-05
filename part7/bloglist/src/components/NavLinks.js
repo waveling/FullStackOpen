@@ -5,7 +5,7 @@ import { useMenuContext } from '../components/Menu'
 
 export const links = ['home', 'blogs', 'users']
 
-const NavbarLinks = () => {
+const NavbarLinks = ({ handleLogout }) => {
     const { closeMenu } = useMenuContext()
 
     return (
@@ -17,7 +17,7 @@ const NavbarLinks = () => {
                     </NavLink>
                 </li>
             ))}
-            <li>
+            <li onClick={handleLogout}>
                 logout
             </li>
         </NavLinksWrapper>

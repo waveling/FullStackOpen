@@ -10,14 +10,15 @@ const BlogWrapper = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
+    padding-top: 10rem;
 `
 
 const Button = styled.button`
-    padding: 12px 20px;
+    padding: 1rem;
     width: 100%;
     margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid lightskyblue;
     border-radius: 4px;
     box-sizing: border-box;
     background-color: lightskyblue;
@@ -25,6 +26,7 @@ const Button = styled.button`
 
 const RemoveButton = styled(Button)`
     background-color: lightpink;
+    border-color: lightpink;
 `
 
 const SingleBlog = () => {
