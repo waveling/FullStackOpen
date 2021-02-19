@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
 
 let persons = [
   {
@@ -24,6 +25,15 @@ let persons = [
 ]
 
 const typeDefs = gql`
+  type Mutation {
+    addPerson(
+      name: String!
+      phone: String
+      street: String!
+      city: String!
+    ): Person
+  }
+
   type Address {
     street: String!
     city: String!
@@ -48,7 +58,7 @@ const resolvers = {
     personCount: () => persons.length,
     allPersons: () => persons,
     findPerson: (root, args) =>
-      persons.find(p => p.name === args.name)
+    persons.find(p => p.name === args.name)
   },
   Person: {
     address: (root) => {
@@ -56,6 +66,13 @@ const resolvers = {
         street: root.street,
         city: root.city
       }
+    }
+  },
+  Mutation: {
+    addPerson: (root, args) => {
+      const person = { ...args, id: uuid() }
+      persons = persons.concat(person)
+      return person
     }
   }
 }
