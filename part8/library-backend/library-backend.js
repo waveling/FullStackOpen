@@ -88,12 +88,8 @@ const typeDefs = gql`
         name: String!
         id: ID!
         born: String
-		bookCount: BookCount
+		bookCount: String	
     }
-
-	type BookCount {
-		bookCount: Int!
-	}
 
     type Book {
         title: String!
@@ -112,11 +108,22 @@ const typeDefs = gql`
 `
 
 const resolvers = {
-  Query: {
-      bookCount: () => books.length,
-      authorCount: () => authors.length,
-      allBooks: () => books,
-      allAuthors: () => authors
+	Query: {
+		bookCount: () => books.length,
+		authorCount: () => authors.length,
+		allBooks: () => books,
+		allAuthors: () => authors
+	},
+  	Author: {
+	  	bookCount: (root) => {
+			//return Math.floor(Math.random() * 10)
+			return books.map(b => {
+				if (b.published === 2012) {
+					return 10
+				}
+				return 20
+			})
+	  	}
   	}
 }
 
