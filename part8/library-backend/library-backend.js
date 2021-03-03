@@ -88,7 +88,7 @@ const typeDefs = gql`
         name: String!
         id: ID!
         born: String
-		bookCount: String	
+		bookCount: Int
     }
 
     type Book {
@@ -116,13 +116,13 @@ const resolvers = {
 	},
   	Author: {
 	  	bookCount: (root) => {
-			//return Math.floor(Math.random() * 10)
-			return books.map(b => {
-				if (b.published === 2012) {
-					return 10
+			let test = []
+			books.map(b => {
+				if (b.author === root.name) {
+					test.push(b.author)
 				}
-				return 20
 			})
+			return test.length
 	  	}
   	}
 }
