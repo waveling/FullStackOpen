@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v4: uuid } = require('uuid')
 
 let authors = [
   {
@@ -84,6 +85,15 @@ let books = [
 ]
 
 const typeDefs = gql`
+	type Mutation {
+		addBook(
+			title: String!
+			author: String!
+			published: Int!
+			genres: [String!]!
+		): Book
+	}
+
     type Author {
         name: String!
         id: ID!
@@ -108,6 +118,14 @@ const typeDefs = gql`
 `
 
 const resolvers = {
+	Mutation: {
+		addBook: (root, args) => {
+			const book = { ...args, id: uuid() }
+			books = books.concat(book)
+			return book
+		}
+	},
+
 	Query: {
 		bookCount: () => books.length,
 		authorCount: () => authors.length,
