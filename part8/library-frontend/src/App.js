@@ -5,13 +5,13 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 
 const ALL_AUTHORS = gql`
-query {
-  allAuthors {
-    name,
-    born,
-    bookCount
+  query {
+    allAuthors {
+      name,
+      born,
+      bookCount
+    }
   }
-}
 `
 
 const ALL_BOOKS = gql`
